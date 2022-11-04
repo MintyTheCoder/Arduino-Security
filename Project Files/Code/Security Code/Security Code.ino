@@ -82,7 +82,7 @@ void loop()
       {
         if(dt.minute >=41)
         {
-          checkKeyIn();  
+          checkKey1In();  
         }        
       }
 
@@ -90,7 +90,7 @@ void loop()
       {
         if(dt.minute >= 0)
         {
-          checkKeyIn();      
+          checkKey1In();      
         }  
       }
 
@@ -98,7 +98,7 @@ void loop()
       {
         if (dt.minute <= 11)
         {
-          checkKeyIn();        
+          checkKey1In();        
         }   
       }      
     }
@@ -205,7 +205,7 @@ void incorrectInput()
   clearData();
 }
 
-void checkKeyIn()
+void checkKey1In()
 {
   if(!strcmp(userInput, codeBlock2))
     {
@@ -220,7 +220,7 @@ void checkKeyIn()
     }          
 }
 
-void checkKeyIn2()
+void checkKey2In()
 {
   if(!strcmp(userInput, codeBlock3))
     {
