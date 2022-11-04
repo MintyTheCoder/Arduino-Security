@@ -93,6 +93,14 @@ void loop()
           checkKeyIn();      
         }  
       }
+
+      else if (dt.hour == 12)
+      {
+        if (dt.minute <= 11)
+        {
+          checkKeyIn();        
+        }   
+      }      
     }
     
     while (dt.hour >= 12 && dt.hour <= 14)
@@ -200,6 +208,21 @@ void incorrectInput()
 void checkKeyIn()
 {
   if(!strcmp(userInput, codeBlock2))
+    {
+      lcd.print("Correct");
+      correctInput();
+    }
+
+  else
+    {
+      lcd.print("Incorrect");
+      incorrectInput();
+    }          
+}
+
+void checkKeyIn2()
+{
+  if(!strcmp(userInput, codeBlock3))
     {
       lcd.print("Correct");
       correctInput();
