@@ -10,6 +10,7 @@
 MFRC522 mfrc522(SS_PIN, RST_PIN);   // Create MFRC522 instance.
 
 char userInput[Password_Length]; 
+char roomCode[Password_Length];
 char codeBlock2[Password_Length] = "B2#205"; 
 char codeBlock3[Password_Length] = "B3#205";
 char toggleCode[Password_Length];
@@ -19,9 +20,11 @@ char customKey;
 DS3231 clock;
 RTCDateTime dt;
 
-byte redPin = 52;
-byte greenPin = 48;
-byte lockPin = 42;
+byte redPin[1] = 52;
+byte greenPin[1] = 48;
+byte lockPin[1] = 42;
+
+byte allPins[3] = redPin[1], greenPin[1], lockPin[1];
 
 const byte ROWS = 4;
 const byte COLS = 4;
@@ -82,7 +85,8 @@ void loop()
       {
         if(dt.minute >=41)
         {
-          checkKey1In();  
+          roomCode[Password_Length] = codeBlock2[Password_Length];
+          checkKeyIn();  
         }        
       }
 
@@ -90,21 +94,36 @@ void loop()
       {
         if(dt.minute >= 0)
         {
-          checkKey1In();      
+          roomCode[Password_Length] = codeBlock2[Password_Length];
+          checkKeyIn();      
         }  
       }
 
       else if (dt.hour == 12)
       {
-        if (dt.minute <= 11)
+        if (dt.minute < 11)
         {
-          checkKey1In();        
+          roomCode[Password_Length] = codeBlock2[Password_Length];
+          checkKeyIn();        
         }   
       }      
     }
     
     while (dt.hour >= 12 && dt.hour <= 14)
     {
+      if (dt.hour == 12)
+      {
+        if (dt.minute >= 11)
+        {
+          roomCode[Password_Length] = codeBlock3[Password_Length];
+          checkKeyIn();
+        }      
+      }      
+    }
+
+    while (dt.hour > 2 && dt.minute > 17)
+    {
+      
     }
 
     lcd.clear();
@@ -205,24 +224,9 @@ void incorrectInput()
   clearData();
 }
 
-void checkKey1In()
+void checkKeyIn()
 {
-  if(!strcmp(userInput, codeBlock2))
-    {
-      lcd.print("Correct");
-      correctInput();
-    }
-
-  else
-    {
-      lcd.print("Incorrect");
-      incorrectInput();
-    }          
-}
-
-void checkKey2In()
-{
-  if(!strcmp(userInput, codeBlock3))
+  if(!strcmp(userInput, roomCode))
     {
       lcd.print("Correct");
       correctInput();
