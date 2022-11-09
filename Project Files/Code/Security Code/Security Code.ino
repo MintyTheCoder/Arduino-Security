@@ -24,7 +24,7 @@ byte redPin = 53;
 byte greenPin = 48;
 byte lockPin = 42;
 
-byte allPins[] = {redPin, greenPin, lockPin};
+//byte allPins[] = {redPin, greenPin, lockPin};
 
 const byte ROWS = 4;
 const byte COLS = 4;
@@ -86,8 +86,6 @@ void loop()
       {
         if(dt.minute >=41)
         {
-          roomCode[Password_Length] = codeBlock2[Password_Length];
-          Serial.println(roomCode);
           checkKeyIn();  
         }        
       }
@@ -96,7 +94,6 @@ void loop()
       {
         if(dt.minute >= 0)
         {
-          roomCode[Password_Length] = codeBlock2[Password_Length];
           checkKeyIn();      
         }  
       }
@@ -105,7 +102,6 @@ void loop()
       {
         if (dt.minute < 11)
         {
-          roomCode[Password_Length] = codeBlock2[Password_Length];
           checkKeyIn();        
         }   
       }      
@@ -117,13 +113,12 @@ void loop()
       {
         if (dt.minute >= 11)
         {
-          roomCode[Password_Length] = codeBlock3[Password_Length];
-          checkKeyIn();
+          checkKeyIn2();
         }      
       }      
     }
 
-    while (dt.hour > 2 && dt.minute > 17)
+    while (dt.hour > 14 && dt.minute > 17)
     {
       
     }
@@ -222,13 +217,13 @@ void incorrectInput()
   delay(5000);
   digitalWrite(redPin, LOW);
   //return;
-  lcd.clear();
+  //lcd.clear();
   clearData();
 }
 
 void checkKeyIn()
 {
-  if(!strcmp(userInput, roomCode))
+  if(!strcmp(userInput, codeBlock2))
     {
       lcd.print("Correct");
       correctInput();
@@ -236,7 +231,22 @@ void checkKeyIn()
 
   else
     {
-      lcd.print("Incorrect");
+      //lcd.print("Incorrect");
+      incorrectInput();
+    }          
+}
+
+void checkKeyIn2()
+{
+  if(!strcmp(userInput, codeBlock3))
+    {
+      lcd.print("Correct");
+      correctInput();
+    }
+
+  else
+    {
+      //lcd.print("Incorrect");
       incorrectInput();
     }          
 }
