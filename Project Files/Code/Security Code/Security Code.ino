@@ -20,11 +20,11 @@ char customKey;
 DS3231 clock;
 RTCDateTime dt;
 
-byte redPin[1] = 52;
-byte greenPin[1] = 48;
-byte lockPin[1] = 42;
+byte redPin = 53;
+byte greenPin = 48;
+byte lockPin = 42;
 
-byte allPins[3] = redPin[1], greenPin[1], lockPin[1];
+byte allPins[] = {redPin, greenPin, lockPin};
 
 const byte ROWS = 4;
 const byte COLS = 4;
@@ -57,6 +57,7 @@ void setup()
   pinMode(greenPin, OUTPUT);
   pinMode(redPin, OUTPUT);
   pinMode(lockPin, OUTPUT);
+  digitalWrite(redPin, LOW);
   digitalWrite(lockPin, HIGH);
 }
 
@@ -86,6 +87,7 @@ void loop()
         if(dt.minute >=41)
         {
           roomCode[Password_Length] = codeBlock2[Password_Length];
+          Serial.println(roomCode);
           checkKeyIn();  
         }        
       }
