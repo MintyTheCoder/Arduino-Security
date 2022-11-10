@@ -3,6 +3,7 @@
 //#include <SPI.h>
 #include <MFRC522.h>
 #include <DS3231.h>
+#include <pitches.h>
 
 #define Password_Length 7 
 #define SS_PIN 47
@@ -17,12 +18,18 @@ char toggleCode[Password_Length];
 byte screenPosition = 0;
 char customKey;
 
+int melody[] = {NOTE_C5, NOTE_D5, NOTE_E5, NOTE_F5, NOTE_G5, NOTE_A5, NOTE_B5, NOTE_C6};
+int duration = 500;  // 500 miliseconds
+
+
 DS3231 clock;
 RTCDateTime dt;
 
 byte redPin = 53;
 byte greenPin = 48;
 byte lockPin = 42;
+const byte buzzerPin = 11;
+
 
 //byte allPins[] = {redPin, greenPin, lockPin};
 
@@ -198,8 +205,10 @@ void rfidInput()
     lcd.clear();
   }
 }
+
 void correctInput()
 {
+  tone(44, melody[1], duration);  
   digitalWrite(lockPin, LOW);
   digitalWrite(greenPin, HIGH); 
   delay(5000);
@@ -212,12 +221,13 @@ void correctInput()
 
 void incorrectInput()
 {
+  tone(44, melody[3], duration);
   lcd.print("Incorrect");
   digitalWrite(redPin, HIGH);
   delay(5000);
   digitalWrite(redPin, LOW);
   //return;
-  //lcd.clear();
+  lcd.clear();
   clearData();
 }
 
