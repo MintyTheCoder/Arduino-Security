@@ -18,7 +18,7 @@ char toggleCode[Password_Length];
 byte screenPosition = 0;
 char customKey;
 
-int melody[] = {NOTE_C5, NOTE_D5, NOTE_E5, NOTE_F5, NOTE_G5, NOTE_A5, NOTE_B5, NOTE_C6};
+int note[] = {NOTE_A5, NOTE_E4};
 int duration = 500;  // 500 miliseconds
 
 
@@ -29,9 +29,6 @@ byte redPin = 53;
 byte greenPin = 48;
 byte lockPin = 42;
 const byte buzzerPin = 11;
-
-
-//byte allPins[] = {redPin, greenPin, lockPin};
 
 const byte ROWS = 4;
 const byte COLS = 4;
@@ -73,10 +70,8 @@ void loop()
   dt = clock.getDateTime();
   
   rfidInput();
-  lcd.setCursor(0,0);
-  lcd.print("Enter Password:");
-    
-  customKey = customKeypad.getKey();
+  getInput();
+  
   if (customKey)
   {
     userInput[screenPosition] = customKey; 
@@ -122,12 +117,24 @@ void loop()
         {
           checkKeyIn2();
         }      
-      }      
+      }   
+
+      else if (dt.hour == 13)
+      {
+        checkKeyIn2();
+      }  
+
+      else if(dt.hour == 14)
+      {
+        if (dt.minute <= 17)
+        {
+          checkKeyIn2();
+        }        
+      }
     }
 
-    while (dt.hour > 14 && dt.minute > 17)
+    while (dt.hour >= 14 && dt.minute > 17)
     {
-      
     }
 
     lcd.clear();
@@ -208,7 +215,7 @@ void rfidInput()
 
 void correctInput()
 {
-  tone(44, melody[1], duration);  
+  tone(44, note[0], duration);  
   digitalWrite(lockPin, LOW);
   digitalWrite(greenPin, HIGH); 
   delay(5000);
@@ -217,11 +224,12 @@ void correctInput()
   //return;
   lcd.clear();
   clearData();
+  getInput();
 }
 
 void incorrectInput()
 {
-  tone(44, melody[3], duration);
+  tone(44, note[1], duration);
   lcd.print("Incorrect");
   digitalWrite(redPin, HIGH);
   delay(5000);
@@ -229,6 +237,15 @@ void incorrectInput()
   //return;
   lcd.clear();
   clearData();
+  getInput();
+}
+
+void getInput()
+{
+  lcd.setCursor(0,0);
+  lcd.print("Enter Password:");
+    
+  customKey = customKeypad.getKey();
 }
 
 void checkKeyIn()
