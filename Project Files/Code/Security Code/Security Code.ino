@@ -4,11 +4,15 @@
 #include <MFRC522.h>
 #include <DS3231.h>
 #include <pitches.h>
+#include "SR04.h"
 
+#define TRIG_PIN 5
+#define ECHO_PIN 4
 #define Password_Length 7 
 #define SS_PIN 47
 #define RST_PIN 49
 MFRC522 mfrc522(SS_PIN, RST_PIN);   // Create MFRC522 instance.
+SR04 sr04 = SR04(ECHO_PIN,TRIG_PIN);
 
 char userInput[Password_Length]; 
 char roomCode[Password_Length];
@@ -29,6 +33,7 @@ byte redPin = 53;
 byte greenPin = 48;
 byte lockPin = 42;
 const byte buzzerPin = 11;
+long senDistance;
 
 const byte ROWS = 4;
 const byte COLS = 4;
@@ -69,6 +74,7 @@ void loop()
 {
   dt = clock.getDateTime();
   
+  distanceCheck();
   rfidInput();
   getInput();
   
@@ -198,6 +204,7 @@ void rfidInput()
     lcd.clear();
     lcd.print("Access Approved");
     Serial.println();
+    Serial.println(senDistance);
     correctInput();
     delay(3000);
     lcd.clear();
@@ -207,7 +214,7 @@ void rfidInput()
     clearData();
     lcd.clear();
     lcd.print("Access denied");
-    delay(3000);
+    delay(500);
     incorrectInput();
     lcd.clear();
   }
@@ -230,7 +237,6 @@ void correctInput()
 void incorrectInput()
 {
   tone(44, note[1], duration);
-  lcd.print("Incorrect");
   digitalWrite(redPin, HIGH);
   delay(5000);
   digitalWrite(redPin, LOW);
@@ -259,6 +265,7 @@ void checkKeyIn()
   else
     {
       //lcd.print("Incorrect");
+      lcd.print("Incorrect");
       incorrectInput();
     }          
 }
@@ -273,7 +280,29 @@ void checkKeyIn2()
 
   else
     {
-      //lcd.print("Incorrect");
+      lcd.print("Incorrect");
       incorrectInput();
     }          
+}
+
+void allPinsOff()
+{
+  digitalWrite(redPin, LOW);
+  digitalWrite(greenPin, LOW);
+  digitalWrite(lockPin, LOW);
+  digitalWrite(buzzerPin, LOW);
+}
+
+void allPinsOn()
+{
+  digitalWrite(redPin, HIGH);
+  digitalWrite(greenPin, HIGH);
+  digitalWrite(lockPin, HIGH);
+  digitalWrite(buzzerPin, HIGH);
+}
+
+void distanceCheck()
+{
+ senDistance=sr04.Distance();
+ 
 }
