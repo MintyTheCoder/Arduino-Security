@@ -12,12 +12,11 @@
 #define SS_PIN 47
 #define RST_PIN 49
 MFRC522 mfrc522(SS_PIN, RST_PIN);   // Create MFRC522 instance.
-SR04 sr04 = SR04(ECHO_PIN,TRIG_PIN);
 
 char userInput[Password_Length]; 
-char roomCode[Password_Length];
 char codeBlock2[Password_Length] = "B2#205"; 
 char codeBlock3[Password_Length] = "B3#205";
+char teacherCode[Password_Length] = "0*0*0*"
 char toggleCode[Password_Length];
 byte screenPosition = 0;
 char customKey;
@@ -32,8 +31,7 @@ RTCDateTime dt;
 byte redPin = 53;
 byte greenPin = 48;
 byte lockPin = 42;
-const byte buzzerPin = 11;
-long senDistance;
+byte buzzerPin = 11;
 
 const byte ROWS = 4;
 const byte COLS = 4;
@@ -74,7 +72,6 @@ void loop()
 {
   dt = clock.getDateTime();
   
-  distanceCheck();
   rfidInput();
   getInput();
   
@@ -141,6 +138,7 @@ void loop()
 
     while (dt.hour >= 14 && dt.minute > 17)
     {
+
     }
 
     lcd.clear();
@@ -156,6 +154,7 @@ void clearData()
   }
   return;
 }
+
 void rfidInput()
 {
   // Look for new cards
@@ -189,9 +188,7 @@ void rfidInput()
     lcd.clear();
     lcd.print("Enter New Code:");
     delay(3000);
-    lcd.setCursor(screenPosition,1);    
-    lcd.print(userInput[screenPosition]); 
-    screenPosition++; 
+    getInput(); 
     Serial.println(userInput[screenPosition]);
     //Serial.println(customKey);
     delay(3000);
@@ -291,18 +288,4 @@ void allPinsOff()
   digitalWrite(greenPin, LOW);
   digitalWrite(lockPin, LOW);
   digitalWrite(buzzerPin, LOW);
-}
-
-void allPinsOn()
-{
-  digitalWrite(redPin, HIGH);
-  digitalWrite(greenPin, HIGH);
-  digitalWrite(lockPin, HIGH);
-  digitalWrite(buzzerPin, HIGH);
-}
-
-void distanceCheck()
-{
- senDistance=sr04.Distance();
- 
 }
