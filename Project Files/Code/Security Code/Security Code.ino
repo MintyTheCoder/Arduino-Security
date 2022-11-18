@@ -16,7 +16,7 @@ MFRC522 mfrc522(SS_PIN, RST_PIN);   // Create MFRC522 instance.
 char userInput[Password_Length]; 
 char codeBlock2[Password_Length] = "B2#205"; 
 char codeBlock3[Password_Length] = "B3#205";
-char teacherCode[Password_Length] = "0*0*0*"
+char teacherCode[Password_Length] = "0*0*0*";
 char toggleCode[Password_Length];
 byte screenPosition = 0;
 char customKey;
@@ -182,30 +182,38 @@ void rfidInput()
   Serial.println();
   Serial.print("Message : ");
   content.toUpperCase();
-  if (content.substring(1) == "A7 BE CB B5" || content.substring(1) == "27 C4 C9 B4") //change here the UID of the card/cards that you want to give access
+  /*if (content.substring(1) == "A7 BE CB B5" || content.substring(1) == "27 C4 C9 B4") //change here the UID of the card/cards that you want to give access
   {
     clearData();
+    customKey = customKeypad.getKey();
     lcd.clear();
     lcd.print("Enter New Code:");
-    delay(3000);
-    getInput(); 
-    Serial.println(userInput[screenPosition]);
-    //Serial.println(customKey);
+    
+    
+    if (customKey)
+    {
+    userInput[screenPosition] = customKey; 
+    lcd.setCursor(screenPosition,1); 
+    lcd.print(userInput[screenPosition]); 
+    screenPosition++; 
+    }
+
+    teacherCode[7] = userInput[7];
+    Serial.println(teacherCode);    
     delay(3000);
     lcd.clear();
-  }
+  } */
   
-  else if (content.substring(1) == "EA E3 78 82" || content.substring(1) == "1A 19 AB 81")
+   if (content.substring(1) == "EA E3 78 82" || content.substring(1) == "1A 19 AB 81")
   {
     clearData();
     lcd.clear();
     lcd.print("Access Approved");
     Serial.println();
-    Serial.println(senDistance);
     correctInput();
     delay(3000);
     lcd.clear();
-  }
+  } 
  
   else   {
     clearData();
