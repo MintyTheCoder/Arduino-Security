@@ -1,13 +1,10 @@
 #include <LiquidCrystal.h>
 #include <Keypad.h>
-//#include <SPI.h>
 #include <MFRC522.h>
 #include <DS3231.h>
 #include <pitches.h>
-#include "SR04.h"
+#include <IRremote.h>
 
-#define TRIG_PIN 5
-#define ECHO_PIN 4
 #define Password_Length 7 
 #define SS_PIN 47
 #define RST_PIN 49
@@ -25,13 +22,18 @@ int note[] = {NOTE_A5, NOTE_E4};
 int duration = 500;  // 500 miliseconds
 
 
+
 DS3231 clock;
 RTCDateTime dt;
 
+int receiver = 6; // Signal Pin of IR receiver to Arduino Digital Pin 6
 byte redPin = 53;
 byte greenPin = 48;
 byte lockPin = 42;
 byte buzzerPin = 11;
+
+IRrecv irrecv(receiver);     // create instance of 'irrecv'
+decode_results results;      // create instance of 'decode_results'
 
 const byte ROWS = 4;
 const byte COLS = 4;
@@ -56,6 +58,7 @@ LiquidCrystal lcd(7, 8, 9, 10, 11, 12);
 void setup()
 {
   Serial.begin(9600);   // Initiate a serial communication
+  irrecv.enableIRIn();
   clock.begin();
   clock.setDateTime(__DATE__, __TIME__); 
   SPI.begin();      // Initiate  SPI bus
@@ -72,6 +75,7 @@ void loop()
 {
   dt = clock.getDateTime();
   
+  checkIR();
   rfidInput();
   getInput();
   
@@ -290,10 +294,36 @@ void checkKeyIn2()
     }          
 }
 
-void allPinsOff()
+void translateIR() // takes action based on IR code received
+// describing Remote IR codes 
 {
-  digitalWrite(redPin, LOW);
-  digitalWrite(greenPin, LOW);
-  digitalWrite(lockPin, LOW);
-  digitalWrite(buzzerPin, LOW);
+
+  switch(results.value)
+
+  {
+  case 0xFF6897: //tone(44, note[0], duration); 
+    lcd.clear(); 
+    lcd.print("Lock Off"); 
+    digitalWrite(lockPin, LOW);   
+    break;
+  case 0xFF30CF: //tone(44, note[1], duration); 
+    lcd.clear(); 
+    lcd.print("Lock On"); 
+    digitalWrite(lockPin, HIGH);    
+    break;  
+
+  default: 
+    Serial.println(" other button   ");
+
+  }// End Case
+}
+
+void checkIR()
+{
+  if (irrecv.decode(&results)) // have we received an IR signal?
+
+  {
+    translateIR(); 
+    irrecv.resume(); // receive the next value
+  }  
 }
