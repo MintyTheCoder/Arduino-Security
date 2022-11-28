@@ -3,7 +3,7 @@
 #include <MFRC522.h>
 #include <DS3231.h>
 #include <pitches.h>
-#include <IRremote.h>
+//#include <IRremote.h>
 
 #define Password_Length 7 
 #define SS_PIN 47
@@ -26,14 +26,15 @@ int duration = 500;  // 500 miliseconds
 DS3231 clock;
 RTCDateTime dt;
 
-int receiver = 6; // Signal Pin of IR receiver to Arduino Digital Pin 6
+int Contrast = 60;
+//int receiver = 6; // Signal Pin of IR receiver to Arduino Digital Pin 6
 byte redPin = 53;
 byte greenPin = 48;
 byte lockPin = 42;
 byte buzzerPin = 11;
 
-IRrecv irrecv(receiver);     // create instance of 'irrecv'
-decode_results results;      // create instance of 'decode_results'
+//IRrecv irrecv(receiver);     // create instance of 'irrecv'
+//decode_results results;      // create instance of 'decode_results'
 
 const byte ROWS = 4;
 const byte COLS = 4;
@@ -58,7 +59,8 @@ LiquidCrystal lcd(7, 8, 9, 10, 11, 12);
 void setup()
 {
   Serial.begin(9600);   // Initiate a serial communication
-  irrecv.enableIRIn();
+  analogWrite(3, Contrast);
+  //irrecv.enableIRIn();
   clock.begin();
   clock.setDateTime(__DATE__, __TIME__); 
   SPI.begin();      // Initiate  SPI bus
@@ -75,7 +77,7 @@ void loop()
 {
   dt = clock.getDateTime();
   
-  checkIR();
+  //checkIR();
   rfidInput();
   getInput();
   
@@ -294,7 +296,7 @@ void checkKeyIn2()
     }          
 }
 
-void translateIR() // takes action based on IR code received
+/*void translateIR() // takes action based on IR code received
 // describing Remote IR codes 
 {
 
@@ -316,9 +318,9 @@ void translateIR() // takes action based on IR code received
     Serial.println(" other button   ");
 
   }// End Case
-}
+}*/
 
-void checkIR()
+/*void checkIR()
 {
   if (irrecv.decode(&results)) // have we received an IR signal?
 
@@ -326,4 +328,4 @@ void checkIR()
     translateIR(); 
     irrecv.resume(); // receive the next value
   }  
-}
+}*/
