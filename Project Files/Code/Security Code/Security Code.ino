@@ -3,7 +3,7 @@
 #include <MFRC522.h>
 #include <DS3231.h>
 #include <pitches.h>
-//#include <IRremote.h>
+#include <IRremote.h>
 
 #define Password_Length 7 
 #define SS_PIN 47
@@ -27,14 +27,14 @@ DS3231 clock;
 RTCDateTime dt;
 
 int Contrast = 60;
-//int receiver = 6; // Signal Pin of IR receiver to Arduino Digital Pin 6
+int receiver = 6; // Signal Pin of IR receiver to Arduino Digital Pin 6
 byte redPin = 53;
 byte greenPin = 48;
 byte lockPin = 42;
 byte buzzerPin = 11;
 
-//IRrecv irrecv(receiver);     // create instance of 'irrecv'
-//decode_results results;      // create instance of 'decode_results'
+IRrecv irrecv(receiver);     // create instance of 'irrecv'
+decode_results results;      // create instance of 'decode_results'
 
 const byte ROWS = 4;
 const byte COLS = 4;
@@ -66,6 +66,7 @@ void setup()
   SPI.begin();      // Initiate  SPI bus
   mfrc522.PCD_Init();   // Initiate MFRC522
   lcd.begin(16,2);
+  lcd.println("test");
   pinMode(greenPin, OUTPUT);
   pinMode(redPin, OUTPUT);
   pinMode(lockPin, OUTPUT);
@@ -75,6 +76,7 @@ void setup()
 
 void loop()
 {
+  lcd.print("Test");
   dt = clock.getDateTime();
   
   //checkIR();
@@ -296,31 +298,33 @@ void checkKeyIn2()
     }          
 }
 
-/*void translateIR() // takes action based on IR code received
+void translateIR() // takes action based on IR code received
 // describing Remote IR codes 
 {
 
   switch(results.value)
 
   {
-  case 0xFF6897: //tone(44, note[0], duration); 
+  case 0xFF6897:
+    Serial.println("Test 1");
     lcd.clear(); 
     lcd.print("Lock Off"); 
     digitalWrite(lockPin, LOW);   
     break;
-  case 0xFF30CF: //tone(44, note[1], duration); 
+  case 0xFF30CF: 
+    Serial.println("Test 2");
     lcd.clear(); 
     lcd.print("Lock On"); 
-    digitalWrite(lockPin, HIGH);    
+    digitalWrite(lockPin, HIGH);
     break;  
 
   default: 
     Serial.println(" other button   ");
 
   }// End Case
-}*/
+}
 
-/*void checkIR()
+void checkIR()
 {
   if (irrecv.decode(&results)) // have we received an IR signal?
 
@@ -328,4 +332,4 @@ void checkKeyIn2()
     translateIR(); 
     irrecv.resume(); // receive the next value
   }  
-}*/
+}
