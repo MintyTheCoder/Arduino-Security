@@ -1,9 +1,9 @@
-#include <LiquidCrystal.h>
 #include <Keypad.h>
 #include <MFRC522.h>
 #include <DS3231.h>
 #include <pitches.h>
 #include <IRremote.h>
+#include <LiquidCrystal.h>
 
 #define Password_Length 7 
 #define SS_PIN 47
@@ -28,14 +28,14 @@ RTCDateTime dt;
 LiquidCrystal lcd(7, 8, 9, 10, 11, 12);
 
 int Contrast = 10;
-int receiver = 6; // Signal Pin of IR receiver to Arduino Digital Pin 6
+//int receiver = 6; // Signal Pin of IR receiver to Arduino Digital Pin 6
 byte redPin = 53;
 byte greenPin = 48;
 byte lockPin = 42;
 byte buzzerPin = 11;
 
-IRrecv irrecv(receiver);     // create instance of 'irrecv'
-decode_results results;      // create instance of 'decode_results'
+//IRrecv irrecv(receiver);     // create instance of 'irrecv'
+//decode_results results;      // create instance of 'decode_results'
 
 const byte ROWS = 4;
 const byte COLS = 4;
@@ -60,7 +60,7 @@ void setup()
   Serial.begin(9600);   // Initiate a serial communication
   //pinMode(3, OUTPUT);
   analogWrite(3, Contrast);
-  irrecv.enableIRIn();
+  //irrecv.enableIRIn();
   clock.begin();
   clock.setDateTime(__DATE__, __TIME__); 
   //SPI.begin();      // Initiate  SPI bus
@@ -78,10 +78,9 @@ void loop()
 {
   dt = clock.getDateTime();
   
-  checkIR();
+  //checkIR();
   rfidInput();
   getInput();
-  Serial.println(customKey);
   if (customKey)
   {
     userInput[screenPosition] = customKey; 
@@ -190,28 +189,6 @@ void rfidInput()
   Serial.println();
   Serial.print("Message : ");
   content.toUpperCase();
-  /*if (content.substring(1) == "A7 BE CB B5" || content.substring(1) == "27 C4 C9 B4") //change here the UID of the card/cards that you want to give access
-  {
-    clearData();
-    customKey = customKeypad.getKey();
-    lcd.clear();
-    lcd.print("Enter New Code:");
-    
-    
-    if (customKey)
-    {
-    userInput[screenPosition] = customKey; 
-    lcd.setCursor(screenPosition,1); 
-    lcd.print(userInput[screenPosition]); 
-    screenPosition++; 
-    }
-
-    teacherCode[7] = userInput[7];
-    Serial.println(teacherCode);    
-    delay(3000);
-    lcd.clear();
-  } */
-  
    if (content.substring(1) == "EA E3 78 82" || content.substring(1) == "1A 19 AB 81")
   {
     clearData();
@@ -296,40 +273,4 @@ void checkKeyIn2()
       lcd.print("Incorrect");
       incorrectInput();
     }          
-}
-
-void translateIR() // takes action based on IR code received
-// describing Remote IR codes 
-{
-
-  switch(results.value)
-
-  {
-  case 0xFF6897:
-    Serial.println("Test 1");
-    lcd.clear(); 
-    lcd.print("Lock Off"); 
-    digitalWrite(lockPin, LOW);   
-    break;
-  case 0xFF30CF: 
-    Serial.println("Test 2");
-    lcd.clear(); 
-    lcd.print("Lock On"); 
-    digitalWrite(lockPin, HIGH);
-    break;  
-
-  default: 
-    Serial.println(" other button   ");
-
-  }// End Case
-}
-
-void checkIR()
-{
-  if (irrecv.decode(&results)) // have we received an IR signal?
-
-  {
-    translateIR(); 
-    irrecv.resume(); // receive the next value
-  }  
 }
