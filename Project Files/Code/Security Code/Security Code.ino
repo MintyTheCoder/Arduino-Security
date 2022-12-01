@@ -25,8 +25,9 @@ int duration = 500;  // 500 miliseconds
 
 DS3231 clock;
 RTCDateTime dt;
+LiquidCrystal lcd(7, 8, 9, 10, 11, 12);
 
-int Contrast = 60;
+int Contrast = 10;
 int receiver = 6; // Signal Pin of IR receiver to Arduino Digital Pin 6
 byte redPin = 53;
 byte greenPin = 48;
@@ -52,21 +53,20 @@ char hexaKeys[ROWS][COLS] = {
 byte rowPins[ROWS] = {22, 25, 26, 29};
 byte colPins[COLS] = {30, 33, 34, 37};
 
-Keypad customKeypad = Keypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS);
-
-LiquidCrystal lcd(7, 8, 9, 10, 11, 12);  
+Keypad customKeypad = Keypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS);  
 
 void setup()
 {
   Serial.begin(9600);   // Initiate a serial communication
+  //pinMode(3, OUTPUT);
   analogWrite(3, Contrast);
-  //irrecv.enableIRIn();
+  irrecv.enableIRIn();
   clock.begin();
   clock.setDateTime(__DATE__, __TIME__); 
-  SPI.begin();      // Initiate  SPI bus
+  //SPI.begin();      // Initiate  SPI bus
   mfrc522.PCD_Init();   // Initiate MFRC522
   lcd.begin(16,2);
-  lcd.println("test");
+  lcd.setCursor(0, 1);
   pinMode(greenPin, OUTPUT);
   pinMode(redPin, OUTPUT);
   pinMode(lockPin, OUTPUT);
@@ -76,13 +76,12 @@ void setup()
 
 void loop()
 {
-  lcd.print("Test");
   dt = clock.getDateTime();
   
-  //checkIR();
+  checkIR();
   rfidInput();
   getInput();
-  
+  Serial.println(customKey);
   if (customKey)
   {
     userInput[screenPosition] = customKey; 
@@ -90,6 +89,7 @@ void loop()
     lcd.print(userInput[screenPosition]); 
     screenPosition++; 
   }
+
   if(screenPosition == Password_Length-1)
   {
     lcd.clear();
