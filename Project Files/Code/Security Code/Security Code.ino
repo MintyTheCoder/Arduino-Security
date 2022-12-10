@@ -238,7 +238,7 @@ void incorrectInput()
 
 void getInput()
 {
-  lcd.setCursor(0,0);
+  lcd.setCursor(0,1);
   lcd.print("Enter Password:");
     
   customKey = customKeypad.getKey();
