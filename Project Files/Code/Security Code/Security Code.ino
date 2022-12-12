@@ -26,14 +26,14 @@ int duration = 500;  // 500 miliseconds
 DS3231 clock;
 RTCDateTime dt;
 LiquidCrystal lcd(7, 8, 9, 10, 11, 12);
-//int receiver = 6; // Signal Pin of IR receiver to Arduino Digital Pin 6
+int receiver = 6; // Signal Pin of IR receiver to Arduino Digital Pin 6
 byte redPin = 53;
 byte greenPin = 48;
 byte lockPin = 42;
 byte buzzerPin = 44;
 
-//IRrecv irrecv(receiver);     // create instance of 'irrecv'
-//decode_results results;      // create instance of 'decode_results'
+IRrecv irrecv(receiver);     // create instance of 'irrecv'
+decode_results results;      // create instance of 'decode_results'
 
 const byte ROWS = 4;
 const byte COLS = 4;
@@ -57,6 +57,7 @@ void setup()
 {
   Serial.begin(9600);   // Initiate a serial communication
   analogWrite(3, 60);
+  irrecv.enableIRIn();
   clock.begin();
   clock.setDateTime(__DATE__, __TIME__); 
   SPI.begin();      // Initiate  SPI bus
@@ -75,15 +76,9 @@ void loop()
   dt = clock.getDateTime();
   getInput();
   rfidInput();
-
+  checkIR();
   
-  if (customKey)
-  {
-    userInput[screenPosition] = customKey; 
-    lcd.setCursor(screenPosition,1); 
-    lcd.print(userInput[screenPosition]); 
-    screenPosition++; 
-  }
+  customKey = customKeypad.getKey();
 
   if(screenPosition == Password_Length-1)
   {
@@ -145,8 +140,8 @@ void loop()
 
     }
 
-    lcd.clear();
-    clearData();  
+    //lcd.clear();
+    //clearData();  
   }
 }
 
@@ -217,7 +212,7 @@ void correctInput()
   digitalWrite(lockPin, HIGH);
   //return;
   lcd.clear();
-  clearData();
+  //clearData();
   getInput();
 }
 
@@ -229,7 +224,7 @@ void incorrectInput()
   digitalWrite(redPin, LOW);
   //return;
   lcd.clear();
-  clearData();
+  //clearData();
   getInput();
 }
 
@@ -238,7 +233,18 @@ void getInput()
   lcd.setCursor(0,0);
   lcd.print("Enter Password:");
     
-  customKey = customKeypad.getKey();
+  
+  if (customKey)
+  {
+    userInput[screenPosition] = customKey; 
+    lcd.setCursor(screenPosition,1); 
+    lcd.print(userInput[screenPosition]); 
+    screenPosition++; 
+  }
+  else
+  {
+    return;
+  }
 }
 
 void checkKeyIn()
@@ -271,4 +277,42 @@ void checkKeyIn2()
       lcd.print("Incorrect");
       incorrectInput();
     }          
+}
+
+void translateIR() // takes action based on IR code received
+// describing Remote IR codes 
+{
+
+  switch(results.value)
+
+  {
+  case 0xFF6897: 
+    tone(44, note[0], duration); 
+    clearData(); 
+    lcd.setCursor(0, 1);
+    lcd.print("Lock Off"); 
+    digitalWrite(lockPin, LOW);   
+    break;
+  case 0xFF30CF: 
+    tone(44, note[1], duration); 
+    lcd.clear(); 
+    lcd.print("Lock On"); 
+    digitalWrite(lockPin, HIGH);    
+    break;  
+
+  default: 
+    Serial.println(" other button   ");
+
+  }// End Case
+}
+
+void checkIR()
+{
+  if (irrecv.decode(&results)) // have we received an IR signal?
+
+  {
+    translateIR(); 
+    irrecv.resume(); // receive the next value
+    getInput();
+  }  
 }
