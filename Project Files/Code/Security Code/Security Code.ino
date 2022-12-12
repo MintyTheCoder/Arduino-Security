@@ -15,7 +15,7 @@ char codeBlock2[Password_Length] = "B2#205";
 char codeBlock3[Password_Length] = "B3#205";
 char teacherCode[Password_Length] = "0*0*0*";
 char toggleCode[Password_Length];
-byte screenPosition = 0;
+int screenPosition = 0;
 char customKey;
 
 int note[] = {NOTE_A5, NOTE_E4};
@@ -26,13 +26,11 @@ int duration = 500;  // 500 miliseconds
 DS3231 clock;
 RTCDateTime dt;
 LiquidCrystal lcd(7, 8, 9, 10, 11, 12);
-
-int Contrast = 10;
 //int receiver = 6; // Signal Pin of IR receiver to Arduino Digital Pin 6
 byte redPin = 53;
 byte greenPin = 48;
 byte lockPin = 42;
-byte buzzerPin = 11;
+byte buzzerPin = 44;
 
 //IRrecv irrecv(receiver);     // create instance of 'irrecv'
 //decode_results results;      // create instance of 'decode_results'
@@ -58,15 +56,13 @@ Keypad customKeypad = Keypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS)
 void setup()
 {
   Serial.begin(9600);   // Initiate a serial communication
-  //pinMode(3, OUTPUT);
-  analogWrite(3, Contrast);
-  //irrecv.enableIRIn();
+  analogWrite(3, 60);
   clock.begin();
   clock.setDateTime(__DATE__, __TIME__); 
-  //SPI.begin();      // Initiate  SPI bus
+  SPI.begin();      // Initiate  SPI bus
   mfrc522.PCD_Init();   // Initiate MFRC522
   lcd.begin(16,2);
-  lcd.setCursor(0, 1);
+  lcd.setCursor(0,1);
   pinMode(greenPin, OUTPUT);
   pinMode(redPin, OUTPUT);
   pinMode(lockPin, OUTPUT);
@@ -77,10 +73,10 @@ void setup()
 void loop()
 {
   dt = clock.getDateTime();
-  
-  //checkIR();
-  rfidInput();
   getInput();
+  rfidInput();
+
+  
   if (customKey)
   {
     userInput[screenPosition] = customKey; 
@@ -92,6 +88,7 @@ void loop()
   if(screenPosition == Password_Length-1)
   {
     lcd.clear();
+    checkKeyIn();
     if (dt.hour >= 10 && dt.hour <= 12)
     {
       if (dt.hour == 10)
@@ -238,7 +235,7 @@ void incorrectInput()
 
 void getInput()
 {
-  lcd.setCursor(0,1);
+  lcd.setCursor(0,0);
   lcd.print("Enter Password:");
     
   customKey = customKeypad.getKey();
@@ -248,13 +245,14 @@ void checkKeyIn()
 {
   if(!strcmp(userInput, codeBlock2))
     {
+      
       lcd.print("Correct");
       correctInput();
+      
     }
 
   else
     {
-      //lcd.print("Incorrect");
       lcd.print("Incorrect");
       incorrectInput();
     }          
