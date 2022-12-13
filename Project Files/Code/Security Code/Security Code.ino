@@ -2,7 +2,6 @@
 #include <MFRC522.h>
 #include <DS3231.h>
 #include <pitches.h>
-#include <IRremote.h>
 #include <LiquidCrystal.h>
 
 #define Password_Length 7
@@ -26,14 +25,10 @@ int duration = 500;  // 500 miliseconds
 DS3231 clock;
 RTCDateTime dt;
 LiquidCrystal lcd(7, 8, 9, 10, 11, 12);
-int receiver = 6;  // Signal Pin of IR receiver to Arduino Digital Pin 6
 byte redPin = 53;
 byte greenPin = 48;
 byte lockPin = 42;
 byte buzzerPin = 44;
-
-IRrecv irrecv(receiver);  // create instance of 'irrecv'
-decode_results results;   // create instance of 'decode_results'
 
 const byte ROWS = 4;
 const byte COLS = 4;
@@ -55,9 +50,7 @@ Keypad customKeypad = Keypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS)
 
 void setup() {
   Serial.begin(9600);  // Initiate a serial communication
-  pinMode(39, OUTPUT);
-  analogWrite(2, 100);
-  irrecv.enableIRIn();
+  analogWrite(2, 60);
   clock.begin();
   clock.setDateTime(__DATE__, __TIME__);
   SPI.begin();         // Initiate  SPI bus
@@ -67,23 +60,25 @@ void setup() {
   pinMode(greenPin, OUTPUT);
   pinMode(redPin, OUTPUT);
   pinMode(lockPin, OUTPUT);
-  pinMode(greenPin, LOW);
-  pinMode(redPin, LOW);
+  digitalWrite(redPin, LOW);
   digitalWrite(lockPin, HIGH);
 }
 
 void loop() {
   dt = clock.getDateTime();
-  checkIR();
-  getInput();
   rfidInput();
+  getInput();
 
+  
+  if (customKey) {
+    userInput[screenPosition] = customKey;
+    lcd.setCursor(screenPosition, 1);
+    lcd.print(userInput[screenPosition]);
+    screenPosition++;
+  }
 
-  customKey = customKeypad.getKey();
-
-  if (screenPosition == Password_Length - 1) {
-    lcd.clear();
-    checkKeyIn();
+  while (screenPosition == Password_Length - 1) {
+    //lcd.clear();
     if (dt.hour >= 10 && dt.hour <= 12) {
       if (dt.hour == 10) {
         if (dt.minute >= 41) {
@@ -126,7 +121,7 @@ void loop() {
     }
 
     lcd.clear();
-    clearData();
+    //clearData();
   }
 }
 
@@ -160,6 +155,7 @@ void rfidInput() {
   Serial.println();
   Serial.print("Message : ");
   content.toUpperCase();
+
   if (content.substring(1) == "EA E3 78 82" || content.substring(1) == "1A 19 AB 81") {
     clearData();
     lcd.clear();
@@ -168,6 +164,7 @@ void rfidInput() {
     correctInput();
     delay(3000);
     lcd.clear();
+    clearData();
   }
 
   else {
@@ -177,6 +174,7 @@ void rfidInput() {
     delay(500);
     incorrectInput();
     lcd.clear();
+    clearData();
   }
 }
 
@@ -187,8 +185,10 @@ void correctInput() {
   delay(5000);
   digitalWrite(greenPin, LOW);
   digitalWrite(lockPin, HIGH);
+  //return;
   lcd.clear();
-  getInput();
+  clearData();
+  //getInput();
 }
 
 void incorrectInput() {
@@ -196,21 +196,18 @@ void incorrectInput() {
   digitalWrite(redPin, HIGH);
   delay(5000);
   digitalWrite(redPin, LOW);
+  //return;
   lcd.clear();
-  getInput();
+  clearData();
+  //getInput();
 }
 
-void getInput() {
-  lcd.setCursor(0, 0);
+void getInput()
+{
+  lcd.setCursor(0,0);
   lcd.print("Enter Password:");
-
-
-  if (customKey) {
-    userInput[screenPosition] = customKey;
-    lcd.setCursor(screenPosition, 1);
-    lcd.print(userInput[screenPosition]);
-    screenPosition++;
-  }
+    
+  customKey = customKeypad.getKey();
 }
 
 void checkKeyIn() {
@@ -236,42 +233,5 @@ void checkKeyIn2() {
   else {
     lcd.print("Incorrect");
     incorrectInput();
-  }
-}
-
-void translateIR()  // takes action based on IR code received
-// describing Remote IR codes
-{
-
-  switch (results.value)
-
-  {
-    case 0xFF6897:
-      tone(44, note[0], duration);
-      clearData();
-      lcd.setCursor(0, 1);
-      lcd.print("Lock Off");
-      digitalWrite(lockPin, LOW);
-      break;
-    case 0xFF30CF:
-      tone(44, note[1], duration);
-      lcd.clear();
-      lcd.print("Lock On");
-      digitalWrite(lockPin, HIGH);
-      break;
-
-    default:
-      Serial.println(" other button   ");
-
-  }  // End Case
-}
-
-void checkIR() {
-  if (irrecv.decode(&results))  // have we received an IR signal?
-
-  {
-    translateIR();
-    irrecv.resume();  // receive the next value
-    getInput();
   }
 }
