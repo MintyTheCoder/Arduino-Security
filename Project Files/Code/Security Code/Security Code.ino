@@ -12,8 +12,7 @@ MFRC522 mfrc522(SS_PIN, RST_PIN);  // Create MFRC522 instance.
 char userInput[Password_Length];
 char codeBlock2[Password_Length] = "B2#205";
 char codeBlock3[Password_Length] = "B3#205";
-char teacherCode[Password_Length] = "0*0*0*";
-char toggleCode[Password_Length];
+char emergencyCode[Password_Length] = "0*0*0*";
 int screenPosition = 0;
 char customKey;
 
@@ -66,10 +65,10 @@ void setup() {
 
 void loop() {
   dt = clock.getDateTime();
-  rfidInput();
+
   getInput();
 
-  
+
   if (customKey) {
     userInput[screenPosition] = customKey;
     lcd.setCursor(screenPosition, 1);
@@ -78,8 +77,12 @@ void loop() {
   }
 
   while (screenPosition == Password_Length - 1) {
-    //lcd.clear();
-    if (dt.hour >= 10 && dt.hour <= 12) {
+
+    lcd.clear();
+
+    checkKeyIn();
+
+    /*if (dt.hour >= 10 && dt.hour <= 12) {
       if (dt.hour == 10) {
         if (dt.minute >= 41) {
           checkKeyIn();
@@ -118,7 +121,7 @@ void loop() {
     }
 
     while (dt.hour >= 14 && dt.minute > 17) {
-    }
+    }*/
 
     lcd.clear();
     //clearData();
@@ -156,15 +159,26 @@ void rfidInput() {
   Serial.print("Message : ");
   content.toUpperCase();
 
-  if (content.substring(1) == "EA E3 78 82" || content.substring(1) == "1A 19 AB 81") {
+  if (content.substring(1) == "EA E3 78 82") {
     clearData();
     lcd.clear();
     lcd.print("Access Approved");
     Serial.println();
     correctInput();
-    delay(3000);
-    lcd.clear();
+    //delay(3000);
+    //lcd.clear();
+    //clearData();
+  }
+
+  else if (content.substring(1) == "1A 19 AB 81") {
     clearData();
+    lcd.clear();
+    lcd.print("Access Approved");
+    Serial.println();
+    correctInput();
+    //delay(3000);
+    //lcd.clear();
+    //clearData();
   }
 
   else {
@@ -173,8 +187,8 @@ void rfidInput() {
     lcd.print("Access denied");
     delay(500);
     incorrectInput();
-    lcd.clear();
-    clearData();
+    //lcd.clear();
+    //clearData();
   }
 }
 
@@ -189,6 +203,7 @@ void correctInput() {
   lcd.clear();
   clearData();
   //getInput();
+  rfidInput();
 }
 
 void incorrectInput() {
@@ -200,22 +215,21 @@ void incorrectInput() {
   lcd.clear();
   clearData();
   //getInput();
+  rfidInput();
 }
 
-void getInput()
-{
-  lcd.setCursor(0,0);
+void getInput() {
+  lcd.setCursor(0, 0);
   lcd.print("Enter Password:");
-    
   customKey = customKeypad.getKey();
+  rfidInput();
 }
 
 void checkKeyIn() {
-  if (!strcmp(userInput, codeBlock2)) {
+  if (!strcmp(userInput, emergencyCode)) {
 
     lcd.print("Correct");
     correctInput();
-
   }
 
   else {
@@ -225,7 +239,7 @@ void checkKeyIn() {
 }
 
 void checkKeyIn2() {
-  if (!strcmp(userInput, codeBlock3)) {
+  if (!strcmp(userInput, emergencyCode)) {
     lcd.print("Correct");
     correctInput();
   }
