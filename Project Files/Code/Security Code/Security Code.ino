@@ -1,6 +1,6 @@
 #include <Keypad.h>
 #include <MFRC522.h>
-#include <DS3231.h>
+//#include <DS3231.h>
 #include <pitches.h>
 #include <LiquidCrystal.h>
 
@@ -19,10 +19,8 @@ char customKey;
 int note[] = { NOTE_A5, NOTE_E4 };
 int duration = 500;  // 500 miliseconds
 
-
-
-DS3231 clock;
-RTCDateTime dt;
+//DS3231 clock;
+//RTCDateTime dt;
 LiquidCrystal lcd(7, 8, 9, 10, 11, 12);
 byte redPin = 53;
 byte greenPin = 48;
@@ -50,12 +48,12 @@ Keypad customKeypad = Keypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS)
 void setup() {
   Serial.begin(9600);  // Initiate a serial communication
   analogWrite(2, 60);
-  clock.begin();
-  clock.setDateTime(__DATE__, __TIME__);
+  //clock.begin();
+  //clock.setDateTime(__DATE__, __TIME__);
   SPI.begin();         // Initiate  SPI bus
   mfrc522.PCD_Init();  // Initiate MFRC522
   lcd.begin(16, 2);
-  lcd.setCursor(0, 1);
+  lcd.setCursor(0, 0);
   pinMode(greenPin, OUTPUT);
   pinMode(redPin, OUTPUT);
   pinMode(lockPin, OUTPUT);
@@ -64,10 +62,10 @@ void setup() {
 }
 
 void loop() {
-  dt = clock.getDateTime();
-
+  //dt = clock.getDateTime();
+  rfidInput();
   getInput();
-
+  rfidInput();
 
   if (customKey) {
     userInput[screenPosition] = customKey;
@@ -79,49 +77,8 @@ void loop() {
   while (screenPosition == Password_Length - 1) {
 
     lcd.clear();
-
+    rfidInput();
     checkKeyIn();
-
-    /*if (dt.hour >= 10 && dt.hour <= 12) {
-      if (dt.hour == 10) {
-        if (dt.minute >= 41) {
-          checkKeyIn();
-        }
-      }
-
-      else if (dt.hour == 11) {
-        if (dt.minute >= 0) {
-          checkKeyIn();
-        }
-      }
-
-      else if (dt.hour == 12) {
-        if (dt.minute < 11) {
-          checkKeyIn();
-        }
-      }
-    }
-
-    while (dt.hour >= 12 && dt.hour <= 14) {
-      if (dt.hour == 12) {
-        if (dt.minute >= 11) {
-          checkKeyIn2();
-        }
-      }
-
-      else if (dt.hour == 13) {
-        checkKeyIn2();
-      }
-
-      else if (dt.hour == 14) {
-        if (dt.minute <= 17) {
-          checkKeyIn2();
-        }
-      }
-    }
-
-    while (dt.hour >= 14 && dt.minute > 17) {
-    }*/
 
     lcd.clear();
     //clearData();
@@ -203,7 +160,6 @@ void correctInput() {
   lcd.clear();
   clearData();
   //getInput();
-  rfidInput();
 }
 
 void incorrectInput() {
@@ -215,7 +171,6 @@ void incorrectInput() {
   lcd.clear();
   clearData();
   //getInput();
-  rfidInput();
 }
 
 void getInput() {
@@ -238,7 +193,7 @@ void checkKeyIn() {
   }
 }
 
-void checkKeyIn2() {
+/*void checkKeyIn2() {
   if (!strcmp(userInput, emergencyCode)) {
     lcd.print("Correct");
     correctInput();
@@ -248,4 +203,4 @@ void checkKeyIn2() {
     lcd.print("Incorrect");
     incorrectInput();
   }
-}
+}*/
