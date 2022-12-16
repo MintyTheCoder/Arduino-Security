@@ -13,7 +13,8 @@ constexpr uint8_t redLed = 53;
 constexpr uint8_t lockPin = 42;
 constexpr uint8_t buzzerPin = 44;
 char initial_password[4] = {'1', '2', '3', '4'};  // Variable to store initial password
-String tagUID = "29 B9 ED 23";  // String to store UID of tag. Change it with your tag's UID
+String tagUID = "EA E3 78 82";  // String to store UID of tag. Change it with your tag's UID
+String tagUID2 = "1A 19 AB 81";
 char password[4];   // Variable to store users password
 boolean RFIDMode = true; // boolean to change modes
 char key_pressed = 0; // Variable to store incoming keys
@@ -38,7 +39,7 @@ byte colPins[COLS] = { 30, 33, 34, 37 };
 Keypad customKeypad = Keypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS);
 void setup() {
   // Arduino Pin configuration
-  
+  analogWrite(2, 60);
   pinMode(buzzerPin, OUTPUT);
   pinMode(redLed, OUTPUT);
   pinMode(greenLed, OUTPUT);
@@ -71,7 +72,7 @@ void loop() {
     }
     tag.toUpperCase();
     //Checking the card
-    if (tag.substring(1) == tagUID)
+    if (tag.substring(1) == tagUID || tag.substring(1) == tagUID2)
     {
       // If UID of tag is matched.
       lcd.clear();
