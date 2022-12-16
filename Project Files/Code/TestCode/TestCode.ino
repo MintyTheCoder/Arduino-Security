@@ -47,6 +47,7 @@ void setup() {
   SPI.begin();      // Init SPI bus
   mfrc522.PCD_Init();   // Init MFRC522
   lcd.clear(); // Clear LCD screen
+  Serial.begin(9600);
 }
 void loop() {
   // System will first look for mode
@@ -58,10 +59,12 @@ void loop() {
     // Look for new cards
     if ( ! mfrc522.PICC_IsNewCardPresent()) {
       return;
+      Serial.print("testo");
     }
     // Select one of the cards
     if ( ! mfrc522.PICC_ReadCardSerial()) {
       return;
+      
     }
     //Reading from the card
     String tag = "";
