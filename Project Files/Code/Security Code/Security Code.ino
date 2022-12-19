@@ -4,6 +4,19 @@
 #include <pitches.h>
 #include <LiquidCrystal.h>
 
+/*Typical pin layout used:
+ * -----------------------------------------------------------------------------------------
+ *             MFRC522      Arduino       Arduino   Arduino    Arduino          Arduino
+ *             Reader/PCD   Uno           Mega      Nano v3    Leonardo/Micro   Pro Micro
+ * Signal      Pin          Pin           Pin       Pin        Pin              Pin
+ * -----------------------------------------------------------------------------------------
+ * RST/Reset   RST          9             49         D9         RESET/ICSP-5     RST
+ * SPI SS      SDA(SS)      10            47        D10        10               10
+ * SPI MOSI    MOSI         11 / ICSP-4   51        D11        ICSP-4           16
+ * SPI MISO    MISO         12 / ICSP-1   50        D12        ICSP-1           14
+ * SPI SCK     SCK          13 / ICSP-3   52        D13        ICSP-3           15
+ */
+
 #define Password_Length 7
 #define SS_PIN 47
 #define RST_PIN 49
@@ -94,13 +107,16 @@ void clearData() {
 
 void rfidInput() {
   // Look for new cards
-  if (!mfrc522.PICC_IsNewCardPresent() || !mfrc522.PICC_ReadCardSerial() ) {
+  if (!mfrc522.PICC_IsNewCardPresent()) {
     return;
   }
-  // Select one of the cards
-  /*if (!mfrc522.PICC_ReadCardSerial()) {
+
+  //Select one of the cards
+  if (mfrc522.PICC_ReadCardSerial())
+  {
+    Serial.println("B test");
     return;
-  }*/
+  }
 
   //Show UID on serial monitor
   Serial.print("UID tag :");
