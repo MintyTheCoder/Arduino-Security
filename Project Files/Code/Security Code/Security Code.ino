@@ -189,13 +189,15 @@ void incorrectInput() {
 
 void getInput() {
   lcd.setCursor(0, 0);
-  lcd.print("Enter Password:");
+  lcd.print("Scan KeyFob or");
+  lcd.setCursor(0, 1);
+  lcd.print("Enter Password")
   customKey = customKeypad.getKey();
   rfidInput();
 }
 
 void checkKeyIn() {
-  if (!strcmp(userInput, emergencyCode)) {
+  if (!strcmp(userInput, emergencyCode) || !strcmp(userInput, codeBlock2) || !strcmp(userInput, codeBlock3)) {
 
     lcd.print("Correct");
     correctInput();
