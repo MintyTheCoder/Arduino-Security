@@ -78,7 +78,6 @@ void loop() {
   //dt = clock.getDateTime();
   rfidInput();
   getInput();
-  rfidInput();
 
   if (customKey) {
     userInput[screenPosition] = customKey;
@@ -106,15 +105,16 @@ void clearData() {
 }
 
 void rfidInput() {
+  lcd.clear();
+  lcd.print("Scan KeyFob");
   // Look for new cards
   if (!mfrc522.PICC_IsNewCardPresent()) {
     return;
   }
 
   //Select one of the cards
-  if (mfrc522.PICC_ReadCardSerial())
+  if (!mfrc522.PICC_ReadCardSerial())
   {
-    Serial.println("B test");
     return;
   }
 
