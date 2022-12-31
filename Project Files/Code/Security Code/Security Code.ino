@@ -72,12 +72,14 @@ void setup() {
   pinMode(lockPin, OUTPUT);
   digitalWrite(redPin, LOW);
   digitalWrite(lockPin, HIGH);
+  
 }
 
 void loop() {
   //dt = clock.getDateTime();
-  rfidInput();
   getInput();
+  customKey = customKeypad.getKey();
+  rfidInput();
 
   if (customKey) {
     userInput[screenPosition] = customKey;
@@ -87,7 +89,6 @@ void loop() {
   }
 
   while (screenPosition == Password_Length - 1) {
-
     lcd.clear();
     rfidInput();
     checkKeyIn();
@@ -189,11 +190,11 @@ void incorrectInput() {
 
 void getInput() {
   lcd.setCursor(0, 0);
-  lcd.print("Scan KeyFob or");
-  lcd.setCursor(0, 1);
-  lcd.print("Enter Password")
-  customKey = customKeypad.getKey();
-  rfidInput();
+  //lcd.print("Scan KeyFob or");
+  //lcd.setCursor(0, 1);
+  lcd.print("Enter Password:");
+  //customKey = customKeypad.getKey();
+  //rfidInput();
 }
 
 void checkKeyIn() {
