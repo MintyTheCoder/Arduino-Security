@@ -93,7 +93,7 @@ void loop() {
     rfidInput();
     checkKeyIn();
 
-    lcd.clear();
+    //lcd.clear();
     //clearData();
   }
 }
@@ -172,7 +172,7 @@ void correctInput() {
   digitalWrite(greenPin, LOW);
   digitalWrite(lockPin, HIGH);
   //return;
-  lcd.clear();
+  //lcd.clear();
   clearData();
   //getInput();
 }
@@ -183,7 +183,7 @@ void incorrectInput() {
   delay(5000);
   digitalWrite(redPin, LOW);
   //return;
-  lcd.clear();
+  //lcd.clear();
   clearData();
   //getInput();
 }
