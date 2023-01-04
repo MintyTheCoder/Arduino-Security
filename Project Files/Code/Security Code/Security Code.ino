@@ -3,6 +3,7 @@
 //#include <DS3231.h>
 #include <pitches.h>
 #include <LiquidCrystal.h>
+#include <EEPROM.h>
 
 /*Typical pin layout used:
  * -----------------------------------------------------------------------------------------
@@ -77,9 +78,10 @@ void setup() {
 
 void loop() {
   //dt = clock.getDateTime();
+  
   getInput();
   customKey = customKeypad.getKey();
-  rfidInput();
+  //rfidInput();
 
   if (customKey) {
     userInput[screenPosition] = customKey;
@@ -90,7 +92,7 @@ void loop() {
 
   while (screenPosition == Password_Length - 1) {
     lcd.clear();
-    rfidInput();
+    //rfidInput();
     checkKeyIn();
 
     //lcd.clear();
@@ -156,8 +158,8 @@ void rfidInput() {
   else {
     clearData();
     lcd.clear();
-    lcd.print("Access denied");
-    delay(500);
+    lcd.print("Access Denied");
+    //delay(500);
     incorrectInput();
     //lcd.clear();
     //clearData();
@@ -173,7 +175,7 @@ void correctInput() {
   digitalWrite(lockPin, HIGH);
   //return;
   //lcd.clear();
-  clearData();
+  //clearData();
   getInput();
 }
 
@@ -184,7 +186,7 @@ void incorrectInput() {
   digitalWrite(redPin, LOW);
   //return;
   //lcd.clear();
-  clearData();
+  //clearData();
   getInput();
 }
 
