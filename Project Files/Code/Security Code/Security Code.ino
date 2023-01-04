@@ -93,7 +93,7 @@ void loop() {
     rfidInput();
     checkKeyIn();
 
-    lcd.clear();
+    //lcd.clear();
     //clearData();
   }
 }
@@ -174,7 +174,7 @@ void correctInput() {
   //return;
   //lcd.clear();
   clearData();
-  //getInput();
+  getInput();
 }
 
 void incorrectInput() {
@@ -183,9 +183,9 @@ void incorrectInput() {
   delay(5000);
   digitalWrite(redPin, LOW);
   //return;
-  lcd.clear();
+  //lcd.clear();
   clearData();
-  //getInput();
+  getInput();
 }
 
 void getInput() {
@@ -194,7 +194,7 @@ void getInput() {
   //lcd.setCursor(0, 1);
   lcd.print("Enter Password:");
   //customKey = customKeypad.getKey();
-  //rfidInput();
+  rfidInput();
 }
 
 void checkKeyIn() {
