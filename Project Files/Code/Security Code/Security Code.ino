@@ -81,7 +81,7 @@ void loop() {
   
   getInput();
   customKey = customKeypad.getKey();
-  //rfidInput();
+  rfidInput();
 
   if (customKey) {
     userInput[screenPosition] = customKey;
@@ -95,8 +95,8 @@ void loop() {
     //rfidInput();
     checkKeyIn();
 
-    //lcd.clear();
-    //clearData();
+    lcd.clear();
+    clearData();
   }
 }
 
@@ -133,8 +133,8 @@ void rfidInput() {
   Serial.print("Message : ");
   content.toUpperCase();
 
-  if (content.substring(1) == "EA E3 78 82") {
-    clearData();
+  if (content.substring(1) == "EA E3 78 82" || content.substring(1) == "1A 19 AB 81" ) {
+    //clearData();
     lcd.clear();
     lcd.print("Access Approved");
     Serial.println();
@@ -144,7 +144,7 @@ void rfidInput() {
     //clearData();
   }
 
-  else if (content.substring(1) == "1A 19 AB 81") {
+  /*else if (content.substring(1) == "1A 19 AB 81") {
     clearData();
     lcd.clear();
     lcd.print("Access Approved");
@@ -153,7 +153,7 @@ void rfidInput() {
     //delay(3000);
     //lcd.clear();
     //clearData();
-  }
+  }*/
 
   else {
     clearData();
@@ -174,9 +174,9 @@ void correctInput() {
   digitalWrite(greenPin, LOW);
   digitalWrite(lockPin, HIGH);
   //return;
-  //lcd.clear();
-  //clearData();
-  getInput();
+  lcd.clear();
+  clearData();
+  //getInput();
 }
 
 void incorrectInput() {
@@ -185,9 +185,9 @@ void incorrectInput() {
   delay(5000);
   digitalWrite(redPin, LOW);
   //return;
-  //lcd.clear();
-  //clearData();
-  getInput();
+  lcd.clear();
+  clearData();
+  //getInput();
 }
 
 void getInput() {
@@ -196,7 +196,7 @@ void getInput() {
   //lcd.setCursor(0, 1);
   lcd.print("Enter Password:");
   //customKey = customKeypad.getKey();
-  rfidInput();
+  //rfidInput();
 }
 
 void checkKeyIn() {
