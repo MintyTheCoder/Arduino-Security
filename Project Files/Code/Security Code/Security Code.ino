@@ -73,12 +73,11 @@ void setup() {
   pinMode(lockPin, OUTPUT);
   digitalWrite(redPin, LOW);
   digitalWrite(lockPin, HIGH);
-  
 }
 
 void loop() {
   //dt = clock.getDateTime();
-  
+  mfrc522.PCD_Reset();
   getInput();
   customKey = customKeypad.getKey();
   rfidInput();
@@ -100,11 +99,13 @@ void loop() {
   }
 }
 
-void clearData() {
-  while (screenPosition != 0) {
-    userInput[screenPosition--] = 0;
-  }
-  return;
+void getInput() {
+  lcd.setCursor(0, 0);
+  //lcd.print("Scan KeyFob or");
+  //lcd.setCursor(0, 1);
+  lcd.print("Enter Password:");
+  //customKey = customKeypad.getKey();
+  //rfidInput();
 }
 
 void rfidInput() {
@@ -166,6 +167,13 @@ void rfidInput() {
   }
 }
 
+void clearData() {
+  while (screenPosition != 0) {
+    userInput[screenPosition--] = 0;
+  }
+  return;
+}
+
 void correctInput() {
   tone(44, note[0], duration);
   digitalWrite(lockPin, LOW);
@@ -176,7 +184,7 @@ void correctInput() {
   //return;
   lcd.clear();
   clearData();
-  //getInput();
+  getInput();
 }
 
 void incorrectInput() {
@@ -187,16 +195,7 @@ void incorrectInput() {
   //return;
   lcd.clear();
   clearData();
-  //getInput();
-}
-
-void getInput() {
-  lcd.setCursor(0, 0);
-  //lcd.print("Scan KeyFob or");
-  //lcd.setCursor(0, 1);
-  lcd.print("Enter Password:");
-  //customKey = customKeypad.getKey();
-  //rfidInput();
+  getInput();
 }
 
 void checkKeyIn() {
@@ -204,11 +203,13 @@ void checkKeyIn() {
 
     lcd.print("Correct");
     correctInput();
+    //getInput();
   }
 
   else {
     lcd.print("Incorrect");
     incorrectInput();
+    //getInput();
   }
 }
 
