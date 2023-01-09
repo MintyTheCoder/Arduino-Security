@@ -62,12 +62,14 @@ Keypad customKeypad = Keypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS)
 void setup() {
   Serial.begin(9600);  // Initiate a serial communication
   analogWrite(2, 60);
+  Serial.write(13);
   //clock.begin();
   //clock.setDateTime(__DATE__, __TIME__);
   SPI.begin();         // Initiate  SPI bus
   mfrc522.PCD_Init();  // Initiate MFRC522
   lcd.begin(16, 2);
   lcd.setCursor(0, 0);
+  lcd.print("Enter Password:");
   pinMode(greenPin, OUTPUT);
   pinMode(redPin, OUTPUT);
   pinMode(lockPin, OUTPUT);
@@ -77,10 +79,11 @@ void setup() {
 
 void loop() {
   //dt = clock.getDateTime();
-  mfrc522.PCD_Reset();
-  getInput();
-  customKey = customKeypad.getKey();
+  
+  //getInput();
   rfidInput();
+  customKey = customKeypad.getKey();
+  
 
   if (customKey) {
     userInput[screenPosition] = customKey;
@@ -91,12 +94,14 @@ void loop() {
 
   while (screenPosition == Password_Length - 1) {
     lcd.clear();
-    //rfidInput();
     checkKeyIn();
 
-    lcd.clear();
+    //lcd.clear();
     clearData();
   }
+
+  Serial.println("Loop Complete 1");
+  //delay(25);
 }
 
 void getInput() {
@@ -106,17 +111,20 @@ void getInput() {
   lcd.print("Enter Password:");
   //customKey = customKeypad.getKey();
   //rfidInput();
+  Serial.println("Input Gotten");
 }
 
 void rfidInput() {
   // Look for new cards
   if (!mfrc522.PICC_IsNewCardPresent()) {
+    Serial.println("RFID No Card");
     return;
   }
 
   //Select one of the cards
   if (!mfrc522.PICC_ReadCardSerial())
   {
+    Serial.println("RFID Loop Done");
     return;
   }
 
@@ -138,11 +146,13 @@ void rfidInput() {
     //clearData();
     lcd.clear();
     lcd.print("Access Approved");
-    Serial.println();
+    Serial.println("RFID Recieved");
     correctInput();
+    Serial.println("RFID Cleared");
     //delay(3000);
     //lcd.clear();
     //clearData();
+    //mfrc522.PCD_Reset();
   }
 
   /*else if (content.substring(1) == "1A 19 AB 81") {
@@ -165,6 +175,8 @@ void rfidInput() {
     //lcd.clear();
     //clearData();
   }
+
+  
 }
 
 void clearData() {
@@ -181,9 +193,10 @@ void correctInput() {
   delay(5000);
   digitalWrite(greenPin, LOW);
   digitalWrite(lockPin, HIGH);
+  delay(1000);
   //return;
-  lcd.clear();
-  clearData();
+  //lcd.clear();
+  //clearData();
   getInput();
 }
 
@@ -192,9 +205,10 @@ void incorrectInput() {
   digitalWrite(redPin, HIGH);
   delay(5000);
   digitalWrite(redPin, LOW);
+  delay(1000);
   //return;
-  lcd.clear();
-  clearData();
+  //lcd.clear();
+  //clearData();
   getInput();
 }
 
@@ -203,13 +217,19 @@ void checkKeyIn() {
 
     lcd.print("Correct");
     correctInput();
-    //getInput();
+    Serial.println("Uno");
+    delay(100);
+    getInput();
+    delay(100);
   }
 
   else {
     lcd.print("Incorrect");
     incorrectInput();
-    //getInput();
+    Serial.println("Uno");
+    delay(100);
+    getInput();
+    delay(100);
   }
 }
 
