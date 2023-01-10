@@ -36,7 +36,7 @@ int duration = 500;  // 500 miliseconds
 //DS3231 clock;
 //RTCDateTime dt;
 LiquidCrystal lcd(7, 8, 9, 10, 11, 12);
-byte redPin = 53;
+byte redPin = 23;
 byte greenPin = 48;
 byte lockPin = 42;
 byte buzzerPin = 44;
@@ -82,8 +82,9 @@ void loop() {
   
   //getInput();
   rfidInput();
+  delay(100);
   customKey = customKeypad.getKey();
-  
+  rfidInput();
 
   if (customKey) {
     userInput[screenPosition] = customKey;
@@ -95,7 +96,7 @@ void loop() {
   while (screenPosition == Password_Length - 1) {
     lcd.clear();
     checkKeyIn();
-
+    rfidInput();
     //lcd.clear();
     clearData();
   }
