@@ -73,7 +73,7 @@ void setup() {
   pinMode(greenPin, OUTPUT);
   pinMode(redPin, OUTPUT);
   pinMode(lockPin, OUTPUT);
-  digitalWrite(redPin, LOW);
+  //digitalWrite(redPin, LOW);
   digitalWrite(lockPin, HIGH);
 }
 
@@ -82,7 +82,7 @@ void loop() {
   
   //getInput();
   rfidInput();
-  delay(100);
+  delay(50);
   customKey = customKeypad.getKey();
   rfidInput();
 
