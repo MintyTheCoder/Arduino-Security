@@ -85,7 +85,7 @@ void loop() {
   rfidInput();
   delay(50);
   customKey = customKeypad.getKey();
-  rfidInput();
+  //rfidInput();
 
   if (customKey) {
     userInput[screenPosition] = customKey;
@@ -98,12 +98,12 @@ void loop() {
     lcd.clear();
     checkKeyIn();
     rfidInput();
-    //lcd.clear();
+    lcd.clear();
     clearData();
   }
 
   Serial.println("Loop Complete 1");
-  //delay(25);
+  delay(15);
 }
 
 void getInput() {
@@ -169,7 +169,7 @@ void rfidInput() {
   }*/
 
   else {
-    clearData();
+    //clearData();
     lcd.clear();
     lcd.print("Access Denied");
     //delay(500);
@@ -222,7 +222,7 @@ void checkKeyIn() {
     Serial.println("Uno");
     delay(100);
     getInput();
-    delay(100);
+    //delay(100);
   }
 
   else {
@@ -231,7 +231,7 @@ void checkKeyIn() {
     Serial.println("Uno");
     delay(100);
     getInput();
-    delay(100);
+    //delay(100);
   }
 }
 
