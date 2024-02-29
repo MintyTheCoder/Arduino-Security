@@ -1,6 +1,5 @@
 #include <Keypad.h>
 #include <MFRC522.h>
-//#include <DS3231.h>
 #include <pitches.h>
 #include <LiquidCrystal.h>
 #include <EEPROM.h>
@@ -33,13 +32,11 @@ char customKey;
 int note[] = { NOTE_A5, NOTE_E4 };
 int duration = 500;  // 500 miliseconds
 
-//DS3231 clock;
-//RTCDateTime dt;
 LiquidCrystal lcd(7, 8, 9, 10, 11, 12);
-byte redPin = 23;
-byte greenPin = 48;
-byte lockPin = 42;
-byte buzzerPin = 44;
+const byte redPin = 23;
+const byte greenPin = 48;
+const byte lockPin = 42;
+const byte buzzerPin = 44;
 
 const byte ROWS = 4;
 const byte COLS = 4;
@@ -47,7 +44,8 @@ const byte COLS = 4;
 String content = "";
 byte letter;
 
-char hexaKeys[ROWS][COLS] = {
+char hexaKeys[ROWS][COLS] = 
+{
   { '1', '2', '3', 'A' },
   { '4', '5', '6', 'B' },
   { '7', '8', '9', 'C' },
@@ -60,12 +58,11 @@ byte colPins[COLS] = { 30, 33, 34, 37 };
 //creates keypad object
 Keypad customKeypad = Keypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS);
 
-void setup() {
+void setup() 
+{
   Serial.begin(9600);  // Initiate a serial communication
   analogWrite(2, 60);
   Serial.write(13);
-  //clock.begin();
-  //clock.setDateTime(__DATE__, __TIME__);
   SPI.begin();         // Initiate  SPI bus
   mfrc522.PCD_Init();  // Initiate MFRC522
   lcd.begin(16, 2);
@@ -79,22 +76,22 @@ void setup() {
 }
 
 void loop() {
-  //dt = clock.getDateTime();
-  
   //getInput();
   rfidInput();
   delay(50);
   customKey = customKeypad.getKey();
   //rfidInput();
 
-  if (customKey) {
+  if (customKey) 
+  {
     userInput[screenPosition] = customKey;
     lcd.setCursor(screenPosition, 1);
     lcd.print(userInput[screenPosition]);
     screenPosition++;
   }
 
-  while (screenPosition == Password_Length - 1) {
+  while (screenPosition == Password_Length - 1) 
+  {
     lcd.clear();
     checkKeyIn();
     rfidInput();
@@ -104,9 +101,10 @@ void loop() {
 
   Serial.println("Loop Complete 1");
   delay(15);
-}
+}s
 
-void getInput() {
+void getInput() 
+{
   lcd.setCursor(0, 0);
   //lcd.print("Scan KeyFob or");
   //lcd.setCursor(0, 1);
@@ -118,7 +116,8 @@ void getInput() {
 
 void rfidInput() {
   // Look for new cards
-  if (!mfrc522.PICC_IsNewCardPresent()) {
+  if (!mfrc522.PICC_IsNewCardPresent()) 
+  {
     Serial.println("RFID No Card");
     return;
   }
@@ -134,7 +133,8 @@ void rfidInput() {
   Serial.print("UID tag :");
   String content = "";
   byte letter;
-  for (byte i = 0; i < mfrc522.uid.size; i++) {
+  for (byte i = 0; i < mfrc522.uid.size; i++) 
+  {
     Serial.print(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " ");
     Serial.print(mfrc522.uid.uidByte[i], HEX);
     content.concat(String(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " "));
@@ -144,7 +144,8 @@ void rfidInput() {
   Serial.print("Message : ");
   content.toUpperCase();
 
-  if (content.substring(1) == "EA E3 78 82" || content.substring(1) == "1A 19 AB 81" ) {
+  if (content.substring(1) == "EA E3 78 82" || content.substring(1) == "1A 19 AB 81" ) 
+  {
     //clearData();
     lcd.clear();
     lcd.print("Access Approved");
@@ -157,18 +158,8 @@ void rfidInput() {
     //mfrc522.PCD_Reset();
   }
 
-  /*else if (content.substring(1) == "1A 19 AB 81") {
-    clearData();
-    lcd.clear();
-    lcd.print("Access Approved");
-    Serial.println();
-    correctInput();
-    //delay(3000);
-    //lcd.clear();
-    //clearData();
-  }*/
-
-  else {
+  else 
+  {
     //clearData();
     lcd.clear();
     lcd.print("Access Denied");
@@ -181,14 +172,17 @@ void rfidInput() {
   
 }
 
-void clearData() {
-  while (screenPosition != 0) {
+void clearData() 
+{
+  while (screenPosition != 0) 
+  {
     userInput[screenPosition--] = 0;
   }
   return;
 }
 
-void correctInput() {
+void correctInput() 
+{
   tone(44, note[0], duration);
   digitalWrite(lockPin, LOW);
   digitalWrite(greenPin, HIGH);
@@ -202,7 +196,8 @@ void correctInput() {
   getInput();
 }
 
-void incorrectInput() {
+void incorrectInput() 
+{
   tone(44, note[1], duration);
   digitalWrite(redPin, HIGH);
   delay(5000);
@@ -214,35 +209,22 @@ void incorrectInput() {
   getInput();
 }
 
-void checkKeyIn() {
-  if (!strcmp(userInput, emergencyCode) || !strcmp(userInput, codeBlock2) || !strcmp(userInput, codeBlock3)) {
-
+void checkKeyIn() 
+{
+  if (!strcmp(userInput, emergencyCode) || !strcmp(userInput, codeBlock2) || !strcmp(userInput, codeBlock3)) 
+  {
     lcd.print("Correct");
     correctInput();
-    Serial.println("Uno");
-    delay(100);
-    getInput();
-    //delay(100);
+    Serial.println("Uno"); 
   }
 
-  else {
+  else 
+  {
     lcd.print("Incorrect");
     incorrectInput();
     Serial.println("Uno");
-    delay(100);
-    getInput();
-    //delay(100);
   }
+
+  delay(100);
+  getInput();
 }
-
-/*void checkKeyIn2() {
-  if (!strcmp(userInput, emergencyCode)) {
-    lcd.print("Correct");
-    correctInput();
-  }
-
-  else {
-    lcd.print("Incorrect");
-    incorrectInput();
-  }
-}*/
