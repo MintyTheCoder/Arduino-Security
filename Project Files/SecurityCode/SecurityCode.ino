@@ -37,6 +37,7 @@ const byte redPin = 23;
 const byte greenPin = 48;
 const byte lockPin = 42;
 const byte buzzerPin = 44;
+const byte buttonPin = 50;
 
 const byte ROWS = 4;
 const byte COLS = 4;
@@ -71,17 +72,21 @@ void setup()
   pinMode(greenPin, OUTPUT);
   pinMode(redPin, OUTPUT);
   pinMode(lockPin, OUTPUT);
+  pinMode(buttonPin, INPUT_PULLUP);
   //digitalWrite(redPin, LOW);
   digitalWrite(lockPin, HIGH);
 }
 
 void loop() {
-  //getInput();
   rfidInput();
   delay(50);
   customKey = customKeypad.getKey();
-  //rfidInput();
 
+  if (digitalRead(buttonPin) == LOW)
+  {
+    digitalWrite(lockPin, LOW);
+  }
+  
   if (customKey) 
   {
     userInput[screenPosition] = customKey;
@@ -99,18 +104,14 @@ void loop() {
     clearData();
   }
 
-  Serial.println("Loop Complete 1");
   delay(15);
-}s
+}
 
 void getInput() 
 {
   lcd.setCursor(0, 0);
-  //lcd.print("Scan KeyFob or");
-  //lcd.setCursor(0, 1);
   lcd.print("Enter Password:");
   //customKey = customKeypad.getKey();
-  //rfidInput();
   Serial.println("Input Gotten");
 }
 
@@ -169,7 +170,7 @@ void rfidInput() {
     //clearData();
   }
 
-  
+  return;
 }
 
 void clearData() 
@@ -190,9 +191,6 @@ void correctInput()
   digitalWrite(greenPin, LOW);
   digitalWrite(lockPin, HIGH);
   delay(1000);
-  //return;
-  //lcd.clear();
-  //clearData();
   getInput();
 }
 
@@ -203,9 +201,6 @@ void incorrectInput()
   delay(5000);
   digitalWrite(redPin, LOW);
   delay(1000);
-  //return;
-  //lcd.clear();
-  //clearData();
   getInput();
 }
 
@@ -215,14 +210,12 @@ void checkKeyIn()
   {
     lcd.print("Correct");
     correctInput();
-    Serial.println("Uno"); 
   }
 
   else 
   {
     lcd.print("Incorrect");
     incorrectInput();
-    Serial.println("Uno");
   }
 
   delay(100);
