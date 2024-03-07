@@ -35,10 +35,11 @@ int duration = 500;  // 500 miliseconds
 
 LiquidCrystal lcd(7, 8, 9, 10, 11, 12);
 const byte redPin = 23;
+
 const byte greenPin = 48;
 const byte lockPin = 42;
 const byte buzzerPin = 44;
-const byte buttonPin = 50;
+const byte buttonPin = 39;
 
 const byte ROWS = 4;
 const byte COLS = 4;
@@ -80,7 +81,7 @@ void setup()
 
 void loop() 
 {
-  //rfidInput();
+  rfidInput();
   digitalWrite(lockPin, HIGH);
 
   delay(50);
@@ -186,7 +187,7 @@ void clearData()
 
 void correctInput() 
 {
-  tone(buzzerPin, note[0], duration);
+  tone(44, note[0], duration);
   digitalWrite(lockPin, LOW);
   digitalWrite(greenPin, HIGH);
   delay(5000);
@@ -198,7 +199,7 @@ void correctInput()
 
 void incorrectInput() 
 {
-  tone(buzzerPin, note[1], duration);
+  tone(44, note[1], duration);
   digitalWrite(redPin, HIGH);
   delay(5000);
   digitalWrite(redPin, LOW);
