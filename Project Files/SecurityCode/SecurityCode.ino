@@ -18,8 +18,9 @@
  */
 
 #define Password_Length 7
-#define SS_PIN 47
 #define RST_PIN 49
+#define SS_PIN 47
+
 MFRC522 mfrc522(SS_PIN, RST_PIN);  // Create MFRC522 instance.
 
 char userInput[Password_Length];
@@ -185,7 +186,7 @@ void clearData()
 
 void correctInput() 
 {
-  tone(44, note[0], duration);
+  tone(buzzerPin, note[0], duration);
   digitalWrite(lockPin, LOW);
   digitalWrite(greenPin, HIGH);
   delay(5000);
@@ -197,7 +198,7 @@ void correctInput()
 
 void incorrectInput() 
 {
-  tone(44, note[1], duration);
+  tone(buzzerPin, note[1], duration);
   digitalWrite(redPin, HIGH);
   delay(5000);
   digitalWrite(redPin, LOW);
