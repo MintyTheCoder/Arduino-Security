@@ -4,17 +4,17 @@
 #include <LiquidCrystal.h>
 #include <EEPROM.h>
 
-/*Typical pin layout used:
- * -----------------------------------------------------------------------------------------
- *             MFRC522      Arduino       Arduino   Arduino    Arduino          Arduino
- *             Reader/PCD   Uno           Mega      Nano v3    Leonardo/Micro   Pro Micro
- * Signal      Pin          Pin           Pin       Pin        Pin              Pin
- * -----------------------------------------------------------------------------------------
- * RST/Reset   RST          9             49         D9         RESET/ICSP-5     RST
- * SPI SS      SDA(SS)      10            47        D10        10               10
- * SPI MOSI    MOSI         11 / ICSP-4   51        D11        ICSP-4           16
- * SPI MISO    MISO         12 / ICSP-1   50        D12        ICSP-1           14
- * SPI SCK     SCK          13 / ICSP-3   52        D13        ICSP-3           15
+/*Pin layout used:
+ * ---------------------------------
+ *             MFRC522      Arduino
+ *             Reader/PCD   Mega
+ * Signal      Pin          Pin
+ * ---------------------------------
+ * RST/Reset   RST          49
+ * SPI SS      SDA(SS)      47
+ * SPI MOSI    MOSI         51
+ * SPI MISO    MISO         50
+ * SPI SCK     SCK          52
  */
 
 #define Password_Length 7
@@ -77,15 +77,13 @@ void setup()
   digitalWrite(lockPin, HIGH);
 }
 
-void loop() {
-  rfidInput();
+void loop() 
+{
+  //rfidInput();
+  digitalWrite(lockPin, HIGH);
+
   delay(50);
   customKey = customKeypad.getKey();
-
-  if (digitalRead(buttonPin) == LOW)
-  {
-    digitalWrite(lockPin, LOW);
-  }
   
   if (customKey) 
   {
@@ -99,9 +97,12 @@ void loop() {
   {
     lcd.clear();
     checkKeyIn();
-    rfidInput();
-    lcd.clear();
     clearData();
+  }
+
+  while (digitalRead(buttonPin) == LOW)
+  {
+    digitalWrite(lockPin, LOW);
   }
 
   delay(15);
@@ -111,8 +112,8 @@ void getInput()
 {
   lcd.setCursor(0, 0);
   lcd.print("Enter Password:");
-  //customKey = customKeypad.getKey();
-  Serial.println("Input Gotten");
+  customKey = customKeypad.getKey();
+  Serial.println("LCD Reset");
 }
 
 void rfidInput() {
@@ -141,6 +142,7 @@ void rfidInput() {
     content.concat(String(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " "));
     content.concat(String(mfrc522.uid.uidByte[i], HEX));
   }
+
   Serial.println();
   Serial.print("Message : ");
   content.toUpperCase();
@@ -177,9 +179,8 @@ void clearData()
 {
   while (screenPosition != 0) 
   {
-    userInput[screenPosition--] = 0;
+    userInput[screenPosition--] = NULL;
   }
-  return;
 }
 
 void correctInput() 
@@ -219,5 +220,4 @@ void checkKeyIn()
   }
 
   delay(100);
-  getInput();
 }
