@@ -24,18 +24,12 @@
 MFRC522 mfrc522(SS_PIN, RST_PIN);  // Create MFRC522 instance.
 
 char userInput[Password_Length];
-char codeBlock2[Password_Length] = "B2#205";
-char codeBlock3[Password_Length] = "B3#205";
-char emergencyCode[Password_Length] = "0*0*0*";
 int screenPosition = 0;
-char customKey;
 
-int note[] = { NOTE_A5, NOTE_E4 };
-int duration = 500;  // 500 miliseconds
 
 LiquidCrystal lcd(7, 8, 9, 10, 11, 12);
-const byte redPin = 23;
 
+const byte redPin = 23;
 const byte greenPin = 48;
 const byte lockPin = 42;
 const byte buzzerPin = 44;
@@ -43,9 +37,6 @@ const byte buttonPin = 39;
 
 const byte ROWS = 4;
 const byte COLS = 4;
-
-String content = "";
-byte letter;
 
 char hexaKeys[ROWS][COLS] = 
 {
@@ -64,57 +55,51 @@ Keypad customKeypad = Keypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS)
 void setup() 
 {
   Serial.begin(9600);  // Initiate a serial communication
-  analogWrite(2, 60);
-  Serial.write(13);
+  //Serial.write(13);
+  
+  setupPins();
+  setupLCD();
+  setupRFID();
+}
+
+void setupRFID()
+{
   SPI.begin();         // Initiate  SPI bus
   mfrc522.PCD_Init();  // Initiate MFRC522
+}
+
+void setupLCD()
+{
+  //set brighness of LCD
+  analogWrite(2, 60);
+
   lcd.begin(16, 2);
   lcd.setCursor(0, 0);
   lcd.print("Enter Password:");
+}
+
+void setupPins()
+{
   pinMode(greenPin, OUTPUT);
   pinMode(redPin, OUTPUT);
   pinMode(lockPin, OUTPUT);
   pinMode(buttonPin, INPUT_PULLUP);
-  //digitalWrite(redPin, LOW);
   digitalWrite(lockPin, HIGH);
 }
 
 void loop() 
 {
-  rfidInput();
-  digitalWrite(lockPin, HIGH);
-
-  delay(50);
-  customKey = customKeypad.getKey();
-  
-  if (customKey) 
-  {
-    userInput[screenPosition] = customKey;
-    lcd.setCursor(screenPosition, 1);
-    lcd.print(userInput[screenPosition]);
-    screenPosition++;
-  }
-
-  while (screenPosition == Password_Length - 1) 
-  {
-    lcd.clear();
-    checkKeyIn();
-    clearData();
-  }
-
-  while (digitalRead(buttonPin) == LOW)
-  {
-    digitalWrite(lockPin, LOW);
-  }
-
-  delay(15);
+  //delay(50);
+  inputRetrieval();
+  buttonCheck();
+  //delay(15);
 }
 
-void getInput() 
+void resetLCD() 
 {
+  //lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("Enter Password:");
-  customKey = customKeypad.getKey();
   Serial.println("LCD Reset");
 }
 
@@ -187,29 +172,57 @@ void clearData()
 
 void correctInput() 
 {
-  tone(44, note[0], duration);
+  playBuzzer(buzzerPin, 0)
   digitalWrite(lockPin, LOW);
   digitalWrite(greenPin, HIGH);
   delay(5000);
   digitalWrite(greenPin, LOW);
   digitalWrite(lockPin, HIGH);
-  delay(1000);
-  getInput();
+  resetLCD();
 }
 
 void incorrectInput() 
 {
-  tone(44, note[1], duration);
+  playBuzzer(buzzerPin, 1)
   digitalWrite(redPin, HIGH);
   delay(5000);
   digitalWrite(redPin, LOW);
-  delay(1000);
-  getInput();
+  resetLCD();
 }
 
-void checkKeyIn() 
+void playBuzzer(byte pin, byte element)
 {
-  if (!strcmp(userInput, emergencyCode) || !strcmp(userInput, codeBlock2) || !strcmp(userInput, codeBlock3)) 
+  int note[] = { NOTE_A5, NOTE_E4 };
+  tone(pin, note[element], 500);
+}
+
+void inputRetrieval()
+{
+  rfidInput();
+  char customKey = customKeypad.getKey();
+
+  if (customKey) 
+  {
+    userInput[screenPosition] = customKey;
+    lcd.setCursor(screenPosition, 1);
+    lcd.print(userInput[screenPosition]);
+    screenPosition++;
+  }
+
+  while (screenPosition == Password_Length - 1) 
+  {
+    lcd.clear();
+    checkKeypadInput();
+    clearData();
+  }
+}
+
+void checkKeypadInput() 
+{
+  char codeBlock1[Password_Length] = "B1#205";
+  char emergencyCode[Password_Length] = "0*0*0*";
+
+  if (!strcmp(userInput, emergencyCode) || !strcmp(userInput, codeBlock1)) 
   {
     lcd.print("Correct");
     correctInput();
@@ -220,6 +233,14 @@ void checkKeyIn()
     lcd.print("Incorrect");
     incorrectInput();
   }
+}
 
-  delay(100);
+void buttonCheck()
+{
+  while (digitalRead(buttonPin) == LOW)
+  {
+    digitalWrite(lockPin, LOW);
+  }
+
+  digitalWrite(lockPin, HIGH);
 }
