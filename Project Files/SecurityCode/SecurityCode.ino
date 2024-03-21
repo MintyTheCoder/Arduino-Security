@@ -2,7 +2,7 @@
 #include <MFRC522.h>
 #include <pitches.h>
 #include <LiquidCrystal.h>
-#include <EEPROM.h>
+//#include <EEPROM.h>
 
 /*Pin layout used:
  * ---------------------------------
@@ -81,6 +81,7 @@ void setupPins()
 {
   pinMode(greenPin, OUTPUT);
   pinMode(redPin, OUTPUT);
+  digitalWrite(redPin, LOW);
   pinMode(lockPin, OUTPUT);
   pinMode(buttonPin, INPUT_PULLUP);
   digitalWrite(lockPin, HIGH);
@@ -89,7 +90,7 @@ void setupPins()
 void loop() 
 {
   inputRetrieval();
-  buttonCheck();
+  //buttonCheck();
 }
 
 void resetLCD() 
@@ -203,7 +204,7 @@ void inputRetrieval()
   while (screenPosition == Password_Length - 1) 
   {
     lcd.clear();
-    checkKeypadInput();
+    //checkKeypadInput();
     rfidInput();
     clearData();
   }
@@ -213,6 +214,7 @@ void checkKeypadInput()
 {
   char codeBlock1[Password_Length] = "B1#205";
   char emergencyCode[Password_Length] = "0*0*0*";
+  Serial.println(userInput);
 
   if (!strcmp(userInput, emergencyCode) || !strcmp(userInput, codeBlock1)) 
   {
@@ -229,9 +231,10 @@ void checkKeypadInput()
 
 void buttonCheck() 
 {
-  if (digitalRead(buttonPin) == LOW) 
+  if (digitalRead(buttonPin) == HIGH) 
   {
     digitalWrite(lockPin, LOW);
+    Serial.println("Button Pressed");
     delay(2500);
   }
 
