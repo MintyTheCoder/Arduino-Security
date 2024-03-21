@@ -80,6 +80,7 @@ void setupLCD()
 void setupPins() 
 {
   pinMode(greenPin, OUTPUT);
+  digitalWrite(greenPin, LOW);
   pinMode(redPin, OUTPUT);
   digitalWrite(redPin, LOW);
   pinMode(lockPin, OUTPUT);
@@ -90,7 +91,7 @@ void setupPins()
 void loop() 
 {
   inputRetrieval();
-  //buttonCheck();
+  buttonCheck();
 }
 
 void resetLCD() 
@@ -231,12 +232,14 @@ void checkKeypadInput()
 
 void buttonCheck() 
 {
-  if (digitalRead(buttonPin) == HIGH) 
+  // Check if the button is pressed (active LOW)
+  if (digitalRead(buttonPin) == LOW) 
   {
+    // If button is pressed, unlock the lock
     digitalWrite(lockPin, LOW);
-    Serial.println("Button Pressed");
-    delay(2500);
+    Serial.println("Button Pressed - Lock Unlocked");
+    delay(2500); // Delay to keep the lock unlocked for 2.5 seconds
+    
   }
-
-  digitalWrite(lockPin, HIGH);
+  digitalWrite(lockPin, HIGH); // Lock the lock after delay
 }
