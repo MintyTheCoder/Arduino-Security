@@ -105,7 +105,7 @@ void rfidInput()
   // Look for new cards
   if (!mfrc522.PICC_IsNewCardPresent()) 
   {
-    Serial.println("RFID No Card");
+    //Serial.println("RFID No Card");
     return;
   }
 
@@ -204,7 +204,7 @@ void inputRetrieval()
   while (screenPosition == Password_Length - 1) 
   {
     lcd.clear();
-    //checkKeypadInput();
+    checkKeypadInput();
     rfidInput();
     clearData();
   }
