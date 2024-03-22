@@ -4,7 +4,7 @@
 #include <LiquidCrystal.h>
 //#include <EEPROM.h>
 
-/*Pin layout used:
+/* Pin layout used:
  * ---------------------------------
  *             MFRC522      Arduino
  *             Reader/PCD   Mega
@@ -49,36 +49,44 @@ char hexaKeys[ROWS][COLS] = {
 byte rowPins[ROWS] = { 22, 25, 26, 29 };
 byte colPins[COLS] = { 30, 33, 34, 37 };
 
-//creates keypad object
+// creates keypad object
 Keypad customKeypad = Keypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS);
 
 void setup() 
 {
+  
   Serial.begin(9600);  // Initiate a serial communication
-
+  while (!Serial);
+  Serial.println("System starting... \n");
   setupPins();
   setupLCD();
   setupRFID();
+  Serial.println("System setup completed. \n");
 }
 
 void setupRFID() 
 {
-  SPI.begin();         // Initiate  SPI bus
+  Serial.println("Initializing RFID...");
+  SPI.begin();         // Initiate SPI bus
   mfrc522.PCD_Init();  // Initiate MFRC522
+  Serial.println("RFID Initialized \n");
 }
 
 void setupLCD() 
 {
-  //set brighness of LCD
+  Serial.println("Initializing LCD...");
+  // set brightness of LCD
   analogWrite(2, 60);
 
   lcd.begin(16, 2);
   lcd.setCursor(0, 0);
   lcd.print("Enter Password:");
+  Serial.println("LCD Initialized \n");
 }
 
 void setupPins() 
 {
+  Serial.println("Initializing Pins...");
   pinMode(greenPin, OUTPUT);
   digitalWrite(greenPin, LOW);
   pinMode(redPin, OUTPUT);
@@ -86,6 +94,7 @@ void setupPins()
   pinMode(lockPin, OUTPUT);
   pinMode(buttonPin, INPUT_PULLUP);
   digitalWrite(lockPin, HIGH);
+  Serial.println("Pins Initialized \n");
 }
 
 void loop() 
@@ -98,26 +107,25 @@ void resetLCD()
 {
   lcd.setCursor(0, 0);
   lcd.print("Enter Password:");
-  Serial.println("LCD Reset");
+  Serial.println("LCD Reset \n");
 }
 
-void rfidInput() 
-{
+void rfidInput() {
   // Look for new cards
   if (!mfrc522.PICC_IsNewCardPresent()) 
   {
-    //Serial.println("RFID No Card");
+    Serial.println("RFID No Card");
     return;
   }
 
-  //Select one of the cards
+  // Select one of the cards
   if (!mfrc522.PICC_ReadCardSerial()) 
   {
     Serial.println("RFID Checked");
     return;
   }
 
-  //Show UID on serial monitor
+  // Show UID on serial monitor
   Serial.print("UID tag :");
   byte letter;
   for (byte i = 0; i < mfrc522.uid.size; i++) 
@@ -136,21 +144,19 @@ void rfidInput()
   {
     lcd.clear();
     lcd.print("Access Approved");
-    Serial.println("RFID Recieved");
+    Serial.println("RFID Access Approved");
     correctInput();
     Serial.println("RFID Cleared");
     clearData();
-  }
-
+  } 
   else 
   {
     lcd.clear();
     lcd.print("Access Denied");
+    Serial.println("RFID Access Denied");
     incorrectInput();
     clearData();
   }
-
-  return;
 }
 
 void clearData() 
@@ -159,7 +165,6 @@ void clearData()
   {
     userInput[screenPosition--] = NULL;
   }
-
   content = "";
 }
 
@@ -168,6 +173,7 @@ void correctInput()
   playBuzzer(buzzerPin, 0);
   digitalWrite(lockPin, LOW);
   digitalWrite(greenPin, HIGH);
+  Serial.println("Lock Unlocked - Correct Input");
   delay(5000);
   digitalWrite(greenPin, LOW);
   digitalWrite(lockPin, HIGH);
@@ -178,6 +184,7 @@ void incorrectInput()
 {
   playBuzzer(buzzerPin, 1);
   digitalWrite(redPin, HIGH);
+  Serial.println("Access Denied - Incorrect Input");
   delay(5000);
   digitalWrite(redPin, LOW);
   resetLCD();
@@ -191,7 +198,7 @@ void playBuzzer(byte pin, byte element)
 
 void inputRetrieval() 
 {
-  rfidInput();
+  //rfidInput();
   char customKey = customKeypad.getKey();
 
   if (customKey) 
@@ -200,13 +207,15 @@ void inputRetrieval()
     lcd.setCursor(screenPosition, 1);
     lcd.print(userInput[screenPosition]);
     screenPosition++;
+    Serial.print("Keypad Input: ");
+    Serial.println(customKey);
   }
 
   while (screenPosition == Password_Length - 1) 
   {
     lcd.clear();
     checkKeypadInput();
-    rfidInput();
+    //rfidInput();
     clearData();
   }
 }
@@ -215,14 +224,14 @@ void checkKeypadInput()
 {
   char codeBlock1[Password_Length] = "B1#205";
   char emergencyCode[Password_Length] = "0*0*0*";
+  Serial.print("Password Inputted By User: ");
   Serial.println(userInput);
 
   if (!strcmp(userInput, emergencyCode) || !strcmp(userInput, codeBlock1)) 
   {
     lcd.print("Correct");
     correctInput();
-  }
-
+  } 
   else 
   {
     lcd.print("Incorrect");
@@ -239,7 +248,6 @@ void buttonCheck()
     digitalWrite(lockPin, LOW);
     Serial.println("Button Pressed - Lock Unlocked");
     delay(2500); // Delay to keep the lock unlocked for 2.5 seconds
-    
   }
   digitalWrite(lockPin, HIGH); // Lock the lock after delay
 }
