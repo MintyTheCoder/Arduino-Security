@@ -1,5 +1,4 @@
 #include <Keypad.h>
-#include <MFRC522.h>
 #include <pitches.h>
 #include <LiquidCrystal.h>
 //#include <EEPROM.h>
@@ -18,11 +17,8 @@
  */
 
 #define Password_Length 7
-#define RST_PIN 49
-#define SS_PIN 47
 
 String content = "";
-MFRC522 mfrc522(SS_PIN, RST_PIN);  // Create MFRC522 instance.
 
 char userInput[Password_Length];
 int screenPosition = 0;
@@ -54,22 +50,19 @@ Keypad customKeypad = Keypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS)
 
 void setup() 
 {
-  Serial.begin(9600);  // Initiate a serial communication
-  Serial1.begin(9600);
+  setupSerial();
   while (!Serial);
   Serial.println("System starting... \n");
   setupPins();
   setupLCD();
-  setupRFID();
   Serial.println("System setup completed. \n");
 }
 
-void setupRFID() 
+void setupSerial()
 {
-  Serial.println("Initializing RFID...");
-  SPI.begin();         // Initiate SPI bus
-  mfrc522.PCD_Init();  // Initiate MFRC522
-  Serial.println("RFID Initialized \n");
+  Serial.begin(9600);  // Initiate a serial communication
+  Serial1.begin(9600);
+  Serial1.setTimeout(10);
 }
 
 void setupLCD() 
@@ -112,7 +105,29 @@ void resetLCD()
 
 void rfidInput() 
 {
-  Serial1.println(Serial1.read());
+  String rfidInput = Serial1.readString();
+
+  if (rfidInput != "")
+  {
+    if (rfidInput.substring(1) == "EA E3 78 82" || rfidInput.substring(1) == "1A 19 AB 81") 
+    {
+      lcd.clear();
+      lcd.print("Access Approved");
+      Serial.println("RFID Access Approved");
+      correctInput();
+      Serial.println("RFID Cleared");
+      clearData();
+    }
+    
+    else 
+    {
+      lcd.clear();
+      lcd.print("Access Denied");
+      Serial.print("RFID Access Denied: \n" + rfidInput.substring(0));
+      incorrectInput();
+      clearData();
+    }
+  }
 }
 
 void clearData() 
