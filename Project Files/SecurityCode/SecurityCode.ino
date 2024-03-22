@@ -51,7 +51,7 @@ Keypad customKeypad = Keypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS)
 void setup() 
 {
   setupSerial();
-  while (!Serial);
+  while (!Serial1);
   Serial.println("System starting... \n");
   setupPins();
   setupLCD();
@@ -60,9 +60,13 @@ void setup()
 
 void setupSerial()
 {
-  Serial.begin(9600);  // Initiate a serial communication
-  Serial1.begin(9600);
+  Serial.begin(9600);  // Initiate a serial communication via USB
+  Serial1.begin(9600); // Initiate a serial communication between boards
   Serial1.setTimeout(10);
+  if(!Serial)
+  {
+    delay(1500);
+  }
 }
 
 void setupLCD() 
