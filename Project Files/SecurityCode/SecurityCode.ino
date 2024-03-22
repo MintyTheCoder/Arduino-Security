@@ -54,8 +54,8 @@ Keypad customKeypad = Keypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS)
 
 void setup() 
 {
-  
   Serial.begin(9600);  // Initiate a serial communication
+  Serial1.begin(9600);
   while (!Serial);
   Serial.println("System starting... \n");
   setupPins();
@@ -110,53 +110,9 @@ void resetLCD()
   Serial.println("LCD Reset \n");
 }
 
-void rfidInput() {
-  // Look for new cards
-  if (!mfrc522.PICC_IsNewCardPresent()) 
-  {
-    Serial.println("RFID No Card");
-    return;
-  }
-
-  // Select one of the cards
-  if (!mfrc522.PICC_ReadCardSerial()) 
-  {
-    Serial.println("RFID Checked");
-    return;
-  }
-
-  // Show UID on serial monitor
-  Serial.print("UID tag :");
-  byte letter;
-  for (byte i = 0; i < mfrc522.uid.size; i++) 
-  {
-    Serial.print(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " ");
-    Serial.print(mfrc522.uid.uidByte[i], HEX);
-    content.concat(String(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " "));
-    content.concat(String(mfrc522.uid.uidByte[i], HEX));
-  }
-
-  Serial.println();
-  Serial.print("Message : ");
-  content.toUpperCase();
-
-  if (content.substring(1) == "EA E3 78 82" || content.substring(1) == "1A 19 AB 81") 
-  {
-    lcd.clear();
-    lcd.print("Access Approved");
-    Serial.println("RFID Access Approved");
-    correctInput();
-    Serial.println("RFID Cleared");
-    clearData();
-  } 
-  else 
-  {
-    lcd.clear();
-    lcd.print("Access Denied");
-    Serial.println("RFID Access Denied");
-    incorrectInput();
-    clearData();
-  }
+void rfidInput() 
+{
+  Serial1.println(Serial1.read());
 }
 
 void clearData() 
@@ -198,7 +154,7 @@ void playBuzzer(byte pin, byte element)
 
 void inputRetrieval() 
 {
-  //rfidInput();
+  rfidInput();
   char customKey = customKeypad.getKey();
 
   if (customKey) 
@@ -215,7 +171,7 @@ void inputRetrieval()
   {
     lcd.clear();
     checkKeypadInput();
-    //rfidInput();
+    rfidInput();
     clearData();
   }
 }
