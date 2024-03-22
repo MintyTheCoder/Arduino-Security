@@ -56,9 +56,14 @@ void rfidInput() {
   //Serial.print("Message : ");
   content.toUpperCase();
 
+  if (content != "")
+  {
+    Serial.print(content);
+  }
 
-  Serial.print(content + "\n");
+  
   content = "";
+  delay(2500);
 
   // if (content.substring(1) == "EA E3 78 82" || content.substring(1) == "1A 19 AB 81") 
   // {
