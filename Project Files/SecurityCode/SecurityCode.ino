@@ -100,7 +100,7 @@ void resetLCD()
 {
   lcd.setCursor(0, 0);
   lcd.print("Enter Password:");
-  Serial.println("LCD Reset \n");
+  Serial.println("LCD Reset");
 }
 
 void rfidInput() 
@@ -115,15 +115,20 @@ void rfidInput()
       lcd.print("Access Approved");
       Serial.println("RFID Access Approved");
       correctInput();
-      Serial.println("RFID Cleared");
+      Serial.println("RFID Cleared\n");
       clearData();
+    } 
+    
+    else if(checkForRFIDRestart(rfidInput.substring(0)))
+    {
+      return;
     }
     
     else 
     {
       lcd.clear();
       lcd.print("Access Denied");
-      Serial.print("RFID Access Denied: \n" + rfidInput.substring(0));
+      //Serial.println("RFID Access Denied: \n" + rfidInput.substring(1));
       incorrectInput();
       clearData();
     }
@@ -221,4 +226,22 @@ void buttonCheck()
     delay(2500); // Delay to keep the lock unlocked for 2.5 seconds
   }
   digitalWrite(lockPin, HIGH); // Lock the lock after delay
+}
+
+bool checkForRFIDRestart(String varToCheck)
+{
+  if (varToCheck == "Initializing RFID...")
+  {
+    Serial.println(varToCheck);
+    return true;
+  }
+
+  else if (varToCheck == "RFID Initialized")
+  {
+    Serial.println(varToCheck);
+    Serial.println("RFID Board or Microcontroller restarted \n");
+    return true;
+  }
+
+  return false;
 }
