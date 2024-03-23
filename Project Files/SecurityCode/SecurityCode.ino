@@ -18,6 +18,12 @@
 
 #define Password_Length 7
 
+
+//for fun
+#define BI_LED_RED 86
+#define BI_LED_GREEN 87
+#define BI_LED_BLUE 88
+
 String content = "";
 
 char userInput[Password_Length];
@@ -91,6 +97,9 @@ void setupPins()
   pinMode(lockPin, OUTPUT);
   pinMode(buttonPin, INPUT_PULLUP);
   digitalWrite(lockPin, HIGH);
+  //digitalWrite(BI_LED_GREEN, LOW);
+  //digitalWrite(BI_LED_BLUE, LOW);
+
   Serial.println("Pins Initialized \n");
 }
 
