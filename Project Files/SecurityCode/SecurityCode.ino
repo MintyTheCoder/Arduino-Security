@@ -18,6 +18,13 @@
 
 #define Password_Length 7
 
+//Pin declaration and intialization
+#define redPin 23
+#define greenPin 48
+#define lockPin 42
+#define buzzerPin 44
+#define buttonPin 39
+
 
 //for fun
 #define BI_LED_RED 86
@@ -32,11 +39,6 @@ int screenPosition = 0;
 
 LiquidCrystal lcd(7, 8, 9, 10, 11, 12);
 
-const byte redPin = 23;
-const byte greenPin = 48;
-const byte lockPin = 42;
-const byte buzzerPin = 44;
-const byte buttonPin = 39;
 
 const byte ROWS = 4;
 const byte COLS = 4;
