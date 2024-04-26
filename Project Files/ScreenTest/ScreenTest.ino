@@ -13,6 +13,8 @@ void setup() {
   Touch.begin();
 
   ui_init();
+
+
 }
 
 void loop() {
