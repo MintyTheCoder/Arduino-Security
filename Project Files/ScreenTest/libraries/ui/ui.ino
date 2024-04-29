@@ -5,8 +5,8 @@
 /*Don't forget to set Sketchbook location in File/Preferencesto the path of your UI project (the parent foder of this INO file)*/
 
 /*Change to your screen resolution*/
-static const uint16_t screenWidth  = 320;
-static const uint16_t screenHeight = 240;
+static const uint16_t screenWidth  = 800;
+static const uint16_t screenHeight = 480;
 
 static lv_disp_draw_buf_t draw_buf;
 static lv_color_t buf[ screenWidth * screenHeight / 10 ];
