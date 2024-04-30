@@ -11,15 +11,15 @@ extern "C" {
 #endif
 
 #if defined __has_include
-  #if __has_include("lvgl.h")
-    #include "lvgl.h"
-  #elif __has_include("lvgl/lvgl.h")
-    #include "lvgl/lvgl.h"
-  #else
-    #include "lvgl.h"
-  #endif
+#if __has_include("lvgl.h")
+#include "lvgl.h"
+#elif __has_include("lvgl/lvgl.h")
+#include "lvgl/lvgl.h"
 #else
-  #include "lvgl.h"
+#include "lvgl.h"
+#endif
+#else
+#include "lvgl.h"
 #endif
 
 #include "ui_helpers.h"
@@ -29,15 +29,19 @@ extern "C" {
 
 // SCREEN: ui_Screen1
 void ui_Screen1_screen_init(void);
-extern lv_obj_t *ui_Screen1;
-void ui_event_Button1( lv_event_t * e);
-extern lv_obj_t *ui_Button1;
-extern lv_obj_t *ui_Container1;
-extern lv_obj_t *ui_Label1;
-extern lv_obj_t *ui_Label2;
-void ui_event_Button3( lv_event_t * e);
-extern lv_obj_t *ui_Button3;
-extern lv_obj_t *ui____initial_actions0;
+extern lv_obj_t * ui_Screen1;
+void ui_event_Button1(lv_event_t * e);
+extern lv_obj_t * ui_Button1;
+void ui_event_Button2(lv_event_t * e);
+extern lv_obj_t * ui_Button2;
+extern lv_obj_t * ui_Label1;
+extern lv_obj_t * ui_Label2;
+extern lv_obj_t * ui_Container1;
+extern lv_obj_t * ui_Label3;
+extern lv_obj_t * ui____initial_actions0;
+
+
+
 
 
 

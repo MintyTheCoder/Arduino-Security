@@ -15,7 +15,7 @@ extern "C" {
 // COMPONENT Password Area
 #define UI_COMP_PASSWORD_AREA_PASSWORD_AREA 0
 #define _UI_COMP_PASSWORD_AREA_NUM 1
-lv_obj_t *ui_Password_Area_create(lv_obj_t *comp_parent);
+lv_obj_t * ui_Password_Area_create(lv_obj_t * comp_parent);
 
 #ifdef __cplusplus
 } /*extern "C"*/
