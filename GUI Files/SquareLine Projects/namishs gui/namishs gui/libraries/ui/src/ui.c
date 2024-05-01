@@ -7,19 +7,43 @@
 #include "ui_helpers.h"
 
 ///////////////////// VARIABLES ////////////////////
-
+char[] input = "";
 
 // SCREEN: ui_Screen1
 void ui_Screen1_screen_init(void);
 lv_obj_t * ui_Screen1;
+lv_obj_t * ui_Text_Input;
+lv_obj_t * ui_Text_input;
 void ui_event_Button1(lv_event_t * e);
 lv_obj_t * ui_Button1;
+lv_obj_t * ui_Label1;
 void ui_event_Button2(lv_event_t * e);
 lv_obj_t * ui_Button2;
-lv_obj_t * ui_Label1;
 lv_obj_t * ui_Label2;
-lv_obj_t * ui_Container1;
+void ui_event_Button3(lv_event_t * e);
+lv_obj_t * ui_Button3;
 lv_obj_t * ui_Label3;
+void ui_event_Button4(lv_event_t * e);
+lv_obj_t * ui_Button4;
+lv_obj_t * ui_Label4;
+void ui_event_Button5(lv_event_t * e);
+lv_obj_t * ui_Button5;
+lv_obj_t * ui_Label5;
+void ui_event_Button6(lv_event_t * e);
+lv_obj_t * ui_Button6;
+lv_obj_t * ui_Label6;
+void ui_event_Button7(lv_event_t * e);
+lv_obj_t * ui_Button7;
+lv_obj_t * ui_Label7;
+void ui_event_Button8(lv_event_t * e);
+lv_obj_t * ui_Button8;
+lv_obj_t * ui_Label8;
+void ui_event_Button9(lv_event_t * e);
+lv_obj_t * ui_Button9;
+lv_obj_t * ui_Label9;
+void ui_event_Button0(lv_event_t * e);
+lv_obj_t * ui_Button0;
+lv_obj_t * ui_Label0;
 lv_obj_t * ui____initial_actions0;
 
 ///////////////////// TEST LVGL SETTINGS ////////////////////
@@ -38,7 +62,7 @@ void ui_event_Button1(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
     if(event_code == LV_EVENT_CLICKED) {
-        _ui_label_set_property(ui_Label3, _UI_LABEL_PROPERTY_TEXT, "1");
+        _ui_label_set_property(ui_Text_input, _UI_LABEL_PROPERTY_TEXT, "1");
     }
 }
 void ui_event_Button2(lv_event_t * e)
@@ -46,7 +70,71 @@ void ui_event_Button2(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
     if(event_code == LV_EVENT_CLICKED) {
-        _ui_label_set_property(ui_Label3, _UI_LABEL_PROPERTY_TEXT, "2");
+        _ui_label_set_property(ui_Text_input, _UI_LABEL_PROPERTY_TEXT, "2");
+    }
+}
+void ui_event_Button3(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+    lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_CLICKED) {
+        _ui_label_set_property(ui_Text_input, _UI_LABEL_PROPERTY_TEXT, "3");
+    }
+}
+void ui_event_Button4(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+    lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_CLICKED) {
+        _ui_label_set_property(ui_Text_input, _UI_LABEL_PROPERTY_TEXT, "4");
+    }
+}
+void ui_event_Button5(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+    lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_CLICKED) {
+        _ui_label_set_property(ui_Text_input, _UI_LABEL_PROPERTY_TEXT, "5");
+    }
+}
+void ui_event_Button6(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+    lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_CLICKED) {
+        _ui_label_set_property(ui_Text_input, _UI_LABEL_PROPERTY_TEXT, "6");
+    }
+}
+void ui_event_Button7(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+    lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_CLICKED) {
+        _ui_label_set_property(ui_Text_input, _UI_LABEL_PROPERTY_TEXT, "7");
+    }
+}
+void ui_event_Button8(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+    lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_CLICKED) {
+        _ui_label_set_property(ui_Text_input, _UI_LABEL_PROPERTY_TEXT, "8");
+    }
+}
+void ui_event_Button9(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+    lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_CLICKED) {
+        _ui_label_set_property(ui_Text_input, _UI_LABEL_PROPERTY_TEXT, "9");
+    }
+}
+void ui_event_Button0(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+    lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_CLICKED) {
+        _ui_label_set_property(ui_Text_input, _UI_LABEL_PROPERTY_TEXT, "0");
     }
 }
 

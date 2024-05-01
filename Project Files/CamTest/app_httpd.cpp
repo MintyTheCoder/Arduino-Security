@@ -207,7 +207,7 @@ static int rgb_printf(fb_data_t *fb, uint32_t color, const char *format, ...)
 static void draw_face_boxes(fb_data_t *fb, std::list<dl::detect::result_t> *results, int face_id)
 {
     int x, y, w, h;
-    uint32_t color = FACE_COLOR_YELLOW;
+    uint32_t color = FACE_COLOR_BLUE;
     if (face_id < 0)
     {
         color = FACE_COLOR_RED;

@@ -7,19 +7,21 @@
 #include "ui_helpers.h"
 
 ///////////////////// VARIABLES ////////////////////
-
+char input[] = NULL;
+int index = 0;
 
 // SCREEN: ui_Screen1
 void ui_Screen1_screen_init(void);
 lv_obj_t * ui_Screen1;
-void ui_event_Button1(lv_event_t * e);
-lv_obj_t * ui_Button1;
 void ui_event_Button2(lv_event_t * e);
 lv_obj_t * ui_Button2;
 lv_obj_t * ui_Label1;
 lv_obj_t * ui_Label2;
 lv_obj_t * ui_Container1;
 lv_obj_t * ui_Label3;
+void ui_event_Keyboard1(lv_event_t * e);
+lv_obj_t * ui_Keyboard1;
+lv_obj_t * ui_TextArea1;
 lv_obj_t * ui____initial_actions0;
 
 ///////////////////// TEST LVGL SETTINGS ////////////////////
@@ -33,20 +35,23 @@ lv_obj_t * ui____initial_actions0;
 ///////////////////// ANIMATIONS ////////////////////
 
 ///////////////////// FUNCTIONS ////////////////////
-void ui_event_Button1(lv_event_t * e)
-{
-    lv_event_code_t event_code = lv_event_get_code(e);
-    lv_obj_t * target = lv_event_get_target(e);
-    if(event_code == LV_EVENT_CLICKED) {
-        _ui_label_set_property(ui_Label3, _UI_LABEL_PROPERTY_TEXT, "1");
-    }
-}
 void ui_event_Button2(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
     if(event_code == LV_EVENT_CLICKED) {
-        _ui_label_set_property(ui_Label3, _UI_LABEL_PROPERTY_TEXT, "2");
+        _ui_label_set_property(ui_Label3, _UI_LABEL_PROPERTY_TEXT, input + "2");
+        input[index] = 2;
+        index++;
+
+    }
+}
+void ui_event_Keyboard1(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+    lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_CLICKED) {
+        _ui_keyboard_set_target(ui_Keyboard1,  ui_TextArea1);
     }
 }
 
