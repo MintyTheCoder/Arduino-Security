@@ -1,0 +1,3 @@
+C:/Users/monty/Documents/GitHub/Arduino-Security/Project Files/ScreenTest/libraries/build/CMakeFiles/ui.dir
+C:/Users/monty/Documents/GitHub/Arduino-Security/Project Files/ScreenTest/libraries/build/CMakeFiles/ALL_BUILD.dir
+C:/Users/monty/Documents/GitHub/Arduino-Security/Project Files/ScreenTest/libraries/build/CMakeFiles/ZERO_CHECK.dir

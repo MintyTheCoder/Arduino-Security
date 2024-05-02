@@ -38,3 +38,7 @@ def type9(event_struct):
 def type0(event_struct):
     return
 
+
+def erase(event_struct):
+    return
+
