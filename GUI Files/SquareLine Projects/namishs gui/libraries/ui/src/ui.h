@@ -28,13 +28,13 @@ extern "C" {
 // SCREEN: ui_Home_Screen
 void ui_Home_Screen_screen_init(void);
 extern lv_obj_t * ui_Home_Screen;
-extern lv_obj_t * ui_Title;
 void ui_event_Password_Button(lv_event_t * e);
 extern lv_obj_t * ui_Password_Button;
 extern lv_obj_t * ui_Go_To_Password;
 void ui_event_Scan_RFID(lv_event_t * e);
 extern lv_obj_t * ui_Scan_RFID;
 extern lv_obj_t * ui_Go_To_RFID;
+extern lv_obj_t * ui_Image1;
 // SCREEN: ui_Password_Screen
 void ui_Password_Screen_screen_init(void);
 extern lv_obj_t * ui_Password_Screen;
@@ -86,6 +86,7 @@ extern lv_obj_t * ui_Back_Label2;
 extern lv_obj_t * ui____initial_actions0;
 
 
+LV_IMG_DECLARE(ui_img_1525890679);    // assets/Designer-removebg-preview.png
 
 
 

@@ -21,7 +21,7 @@ void ui_RFID_Screen_screen_init(void)
     lv_label_set_text(ui_Label, "Scan your RFID tag below");
     lv_obj_set_style_text_color(ui_Label, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_Label, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_Label, &lv_font_montserrat_14, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_Label, &lv_font_montserrat_48, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_Back_Button2 = lv_btn_create(ui_RFID_Screen);
     lv_obj_set_width(ui_Back_Button2, 75);
