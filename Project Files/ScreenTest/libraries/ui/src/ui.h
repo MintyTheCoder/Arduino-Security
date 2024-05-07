@@ -38,6 +38,9 @@ extern lv_obj_t * ui_Image1;
 // SCREEN: ui_Password_Screen
 void ui_Password_Screen_screen_init(void);
 extern lv_obj_t * ui_Password_Screen;
+void ui_event_Back_Button(lv_event_t * e);
+extern lv_obj_t * ui_Back_Button;
+extern lv_obj_t * ui_Back_Label;
 extern lv_obj_t * ui_Text_Input;
 extern lv_obj_t * ui_Text_input;
 void ui_event_Backspace_Button(lv_event_t * e);
@@ -73,9 +76,9 @@ extern lv_obj_t * ui_Label9;
 void ui_event_Button0(lv_event_t * e);
 extern lv_obj_t * ui_Button0;
 extern lv_obj_t * ui_Label0;
-void ui_event_Back_Button(lv_event_t * e);
-extern lv_obj_t * ui_Back_Button;
-extern lv_obj_t * ui_Back_Label;
+void ui_event_Enter_Button(lv_event_t * e);
+extern lv_obj_t * ui_Enter_Button;
+extern lv_obj_t * ui_Enter;
 // SCREEN: ui_RFID_Screen
 void ui_RFID_Screen_screen_init(void);
 extern lv_obj_t * ui_RFID_Screen;

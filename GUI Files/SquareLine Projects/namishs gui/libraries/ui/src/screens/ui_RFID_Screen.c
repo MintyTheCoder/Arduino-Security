@@ -31,6 +31,8 @@ void ui_RFID_Screen_screen_init(void)
     lv_obj_set_align(ui_Back_Button2, LV_ALIGN_CENTER);
     lv_obj_add_flag(ui_Back_Button2, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
     lv_obj_clear_flag(ui_Back_Button2, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_bg_color(ui_Back_Button2, lv_color_hex(0x942420), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_Back_Button2, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_Back_Label2 = lv_label_create(ui_Back_Button2);
     lv_obj_set_width(ui_Back_Label2, LV_SIZE_CONTENT);   /// 1

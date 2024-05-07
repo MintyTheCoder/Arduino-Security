@@ -12,6 +12,23 @@ void ui_Password_Screen_screen_init(void)
     lv_obj_set_style_bg_color(ui_Password_Screen, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_Password_Screen, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
+    ui_Back_Button = lv_btn_create(ui_Password_Screen);
+    lv_obj_set_width(ui_Back_Button, 75);
+    lv_obj_set_height(ui_Back_Button, 50);
+    lv_obj_set_x(ui_Back_Button, -349);
+    lv_obj_set_y(ui_Back_Button, -204);
+    lv_obj_set_align(ui_Back_Button, LV_ALIGN_CENTER);
+    lv_obj_add_flag(ui_Back_Button, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
+    lv_obj_clear_flag(ui_Back_Button, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_bg_color(ui_Back_Button, lv_color_hex(0x942420), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_Back_Button, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_Back_Label = lv_label_create(ui_Back_Button);
+    lv_obj_set_width(ui_Back_Label, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_Back_Label, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_align(ui_Back_Label, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_Back_Label, "←");
+
     ui_Text_Input = lv_obj_create(ui_Password_Screen);
     lv_obj_set_width(ui_Text_Input, 175);
     lv_obj_set_height(ui_Text_Input, 50);
@@ -30,11 +47,13 @@ void ui_Password_Screen_screen_init(void)
     ui_Backspace_Button = lv_btn_create(ui_Password_Screen);
     lv_obj_set_width(ui_Backspace_Button, 50);
     lv_obj_set_height(ui_Backspace_Button, 50);
-    lv_obj_set_x(ui_Backspace_Button, 125);
+    lv_obj_set_x(ui_Backspace_Button, 140);
     lv_obj_set_y(ui_Backspace_Button, -180);
     lv_obj_set_align(ui_Backspace_Button, LV_ALIGN_CENTER);
     lv_obj_add_flag(ui_Backspace_Button, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
     lv_obj_clear_flag(ui_Backspace_Button, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_bg_color(ui_Backspace_Button, lv_color_hex(0x942420), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_Backspace_Button, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_Backspace_Label = lv_label_create(ui_Backspace_Button);
     lv_obj_set_width(ui_Backspace_Label, LV_SIZE_CONTENT);   /// 1
@@ -50,6 +69,8 @@ void ui_Password_Screen_screen_init(void)
     lv_obj_set_align(ui_Button1, LV_ALIGN_CENTER);
     lv_obj_add_flag(ui_Button1, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
     lv_obj_clear_flag(ui_Button1, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_bg_color(ui_Button1, lv_color_hex(0x942420), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_Button1, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_Label1 = lv_label_create(ui_Button1);
     lv_obj_set_width(ui_Label1, LV_SIZE_CONTENT);   /// 1
@@ -66,6 +87,8 @@ void ui_Password_Screen_screen_init(void)
     lv_obj_set_align(ui_Button2, LV_ALIGN_CENTER);
     lv_obj_add_flag(ui_Button2, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
     lv_obj_clear_flag(ui_Button2, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_bg_color(ui_Button2, lv_color_hex(0x942420), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_Button2, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_Label2 = lv_label_create(ui_Button2);
     lv_obj_set_width(ui_Label2, LV_SIZE_CONTENT);   /// 1
@@ -81,6 +104,8 @@ void ui_Password_Screen_screen_init(void)
     lv_obj_set_align(ui_Button3, LV_ALIGN_CENTER);
     lv_obj_add_flag(ui_Button3, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
     lv_obj_clear_flag(ui_Button3, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_bg_color(ui_Button3, lv_color_hex(0x942420), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_Button3, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_Label3 = lv_label_create(ui_Button3);
     lv_obj_set_width(ui_Label3, LV_SIZE_CONTENT);   /// 1
@@ -96,6 +121,8 @@ void ui_Password_Screen_screen_init(void)
     lv_obj_set_align(ui_Button4, LV_ALIGN_CENTER);
     lv_obj_add_flag(ui_Button4, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
     lv_obj_clear_flag(ui_Button4, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_bg_color(ui_Button4, lv_color_hex(0x942420), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_Button4, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_Label4 = lv_label_create(ui_Button4);
     lv_obj_set_width(ui_Label4, LV_SIZE_CONTENT);   /// 1
@@ -109,6 +136,8 @@ void ui_Password_Screen_screen_init(void)
     lv_obj_set_align(ui_Button5, LV_ALIGN_CENTER);
     lv_obj_add_flag(ui_Button5, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
     lv_obj_clear_flag(ui_Button5, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_bg_color(ui_Button5, lv_color_hex(0x942420), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_Button5, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_Label5 = lv_label_create(ui_Button5);
     lv_obj_set_width(ui_Label5, LV_SIZE_CONTENT);   /// 1
@@ -124,6 +153,8 @@ void ui_Password_Screen_screen_init(void)
     lv_obj_set_align(ui_Button6, LV_ALIGN_CENTER);
     lv_obj_add_flag(ui_Button6, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
     lv_obj_clear_flag(ui_Button6, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_bg_color(ui_Button6, lv_color_hex(0x942420), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_Button6, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_Label6 = lv_label_create(ui_Button6);
     lv_obj_set_width(ui_Label6, LV_SIZE_CONTENT);   /// 1
@@ -139,6 +170,8 @@ void ui_Password_Screen_screen_init(void)
     lv_obj_set_align(ui_Button7, LV_ALIGN_CENTER);
     lv_obj_add_flag(ui_Button7, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
     lv_obj_clear_flag(ui_Button7, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_bg_color(ui_Button7, lv_color_hex(0x942420), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_Button7, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_Label7 = lv_label_create(ui_Button7);
     lv_obj_set_width(ui_Label7, LV_SIZE_CONTENT);   /// 1
@@ -154,6 +187,8 @@ void ui_Password_Screen_screen_init(void)
     lv_obj_set_align(ui_Button8, LV_ALIGN_CENTER);
     lv_obj_add_flag(ui_Button8, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
     lv_obj_clear_flag(ui_Button8, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_bg_color(ui_Button8, lv_color_hex(0x942420), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_Button8, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_Label8 = lv_label_create(ui_Button8);
     lv_obj_set_width(ui_Label8, LV_SIZE_CONTENT);   /// 1
@@ -169,6 +204,8 @@ void ui_Password_Screen_screen_init(void)
     lv_obj_set_align(ui_Button9, LV_ALIGN_CENTER);
     lv_obj_add_flag(ui_Button9, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
     lv_obj_clear_flag(ui_Button9, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_bg_color(ui_Button9, lv_color_hex(0x942420), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_Button9, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_Label9 = lv_label_create(ui_Button9);
     lv_obj_set_width(ui_Label9, LV_SIZE_CONTENT);   /// 1
@@ -184,6 +221,8 @@ void ui_Password_Screen_screen_init(void)
     lv_obj_set_align(ui_Button0, LV_ALIGN_CENTER);
     lv_obj_add_flag(ui_Button0, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
     lv_obj_clear_flag(ui_Button0, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_bg_color(ui_Button0, lv_color_hex(0x942420), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_Button0, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_Label0 = lv_label_create(ui_Button0);
     lv_obj_set_width(ui_Label0, LV_SIZE_CONTENT);   /// 1
@@ -191,21 +230,24 @@ void ui_Password_Screen_screen_init(void)
     lv_obj_set_align(ui_Label0, LV_ALIGN_CENTER);
     lv_label_set_text(ui_Label0, "0");
 
-    ui_Back_Button = lv_btn_create(ui_Password_Screen);
-    lv_obj_set_width(ui_Back_Button, 75);
-    lv_obj_set_height(ui_Back_Button, 50);
-    lv_obj_set_x(ui_Back_Button, -349);
-    lv_obj_set_y(ui_Back_Button, -204);
-    lv_obj_set_align(ui_Back_Button, LV_ALIGN_CENTER);
-    lv_obj_add_flag(ui_Back_Button, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
-    lv_obj_clear_flag(ui_Back_Button, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    ui_Enter_Button = lv_btn_create(ui_Password_Screen);
+    lv_obj_set_width(ui_Enter_Button, 100);
+    lv_obj_set_height(ui_Enter_Button, 50);
+    lv_obj_set_x(ui_Enter_Button, 150);
+    lv_obj_set_y(ui_Enter_Button, 200);
+    lv_obj_set_align(ui_Enter_Button, LV_ALIGN_CENTER);
+    lv_obj_add_flag(ui_Enter_Button, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
+    lv_obj_clear_flag(ui_Enter_Button, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_bg_color(ui_Enter_Button, lv_color_hex(0x942420), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_Enter_Button, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_Back_Label = lv_label_create(ui_Back_Button);
-    lv_obj_set_width(ui_Back_Label, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_Back_Label, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_align(ui_Back_Label, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_Back_Label, "<--");
+    ui_Enter = lv_label_create(ui_Enter_Button);
+    lv_obj_set_width(ui_Enter, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_Enter, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_align(ui_Enter, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_Enter, "☑");
 
+    lv_obj_add_event_cb(ui_Back_Button, ui_event_Back_Button, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Backspace_Button, ui_event_Backspace_Button, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Button1, ui_event_Button1, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Button2, ui_event_Button2, LV_EVENT_ALL, NULL);
@@ -217,6 +259,6 @@ void ui_Password_Screen_screen_init(void)
     lv_obj_add_event_cb(ui_Button8, ui_event_Button8, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Button9, ui_event_Button9, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Button0, ui_event_Button0, LV_EVENT_ALL, NULL);
-    lv_obj_add_event_cb(ui_Back_Button, ui_event_Back_Button, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_Enter_Button, ui_event_Enter_Button, LV_EVENT_ALL, NULL);
 
 }

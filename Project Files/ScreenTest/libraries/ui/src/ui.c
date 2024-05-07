@@ -7,8 +7,7 @@
 #include "ui_helpers.h"
 
 ///////////////////// VARIABLES ////////////////////
-char input[6] = "";
-int currentPos = 0;
+
 
 // SCREEN: ui_Home_Screen
 void ui_Home_Screen_screen_init(void);
@@ -25,6 +24,9 @@ lv_obj_t * ui_Image1;
 // SCREEN: ui_Password_Screen
 void ui_Password_Screen_screen_init(void);
 lv_obj_t * ui_Password_Screen;
+void ui_event_Back_Button(lv_event_t * e);
+lv_obj_t * ui_Back_Button;
+lv_obj_t * ui_Back_Label;
 lv_obj_t * ui_Text_Input;
 lv_obj_t * ui_Text_input;
 void ui_event_Backspace_Button(lv_event_t * e);
@@ -60,9 +62,9 @@ lv_obj_t * ui_Label9;
 void ui_event_Button0(lv_event_t * e);
 lv_obj_t * ui_Button0;
 lv_obj_t * ui_Label0;
-void ui_event_Back_Button(lv_event_t * e);
-lv_obj_t * ui_Back_Button;
-lv_obj_t * ui_Back_Label;
+void ui_event_Enter_Button(lv_event_t * e);
+lv_obj_t * ui_Enter_Button;
+lv_obj_t * ui_Enter;
 
 
 // SCREEN: ui_RFID_Screen
@@ -85,12 +87,6 @@ lv_obj_t * ui____initial_actions0;
 ///////////////////// ANIMATIONS ////////////////////
 
 ///////////////////// FUNCTIONS ////////////////////
-void add_to_label(int number_to_add)
-{
-    input[currentPos++] = number_to_add; // Append number_to_add to input and increment currentPos
-    input[currentPos] = '\0';  // Null-terminate the string
-    _ui_label_set_property(ui_Text_input, _UI_LABEL_PROPERTY_TEXT, input);
-}
 void ui_event_Password_Button(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
@@ -107,22 +103,20 @@ void ui_event_Scan_RFID(lv_event_t * e)
         _ui_screen_change(&ui_RFID_Screen, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_RFID_Screen_screen_init);
     }
 }
+void ui_event_Back_Button(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+    lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_CLICKED) {
+        _ui_screen_change(&ui_Home_Screen, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_Home_Screen_screen_init);
+    }
+}
 void ui_event_Backspace_Button(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
     if(event_code == LV_EVENT_CLICKED) {
-        if (currentPos > 0)
-        {
-            input[currentPos--] = " "; // Append '1' to input and increment currentPos
-            input[currentPos] = '\0';  // Null-terminate the string
-            _ui_label_set_property(ui_Text_input, _UI_LABEL_PROPERTY_TEXT, input);
-        }
-
-        if (currentPos == 0)
-        {
-            _ui_label_set_property(ui_Text_input, _UI_LABEL_PROPERTY_TEXT, "Password:");
-        }
+        erase(e);
     }
 }
 void ui_event_Button1(lv_event_t * e)
@@ -130,10 +124,7 @@ void ui_event_Button1(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
     if(event_code == LV_EVENT_CLICKED) {
-        if (currentPos <= 5)
-        {
-            add_to_label(1);
-        }
+        _ui_label_set_property(ui_Text_input, _UI_LABEL_PROPERTY_TEXT, "1");
     }
 }
 void ui_event_Button2(lv_event_t * e)
@@ -141,10 +132,7 @@ void ui_event_Button2(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
     if(event_code == LV_EVENT_CLICKED) {
-        if (currentPos <= 5)
-        {
-            add_to_label(2);
-        }
+        _ui_label_set_property(ui_Text_input, _UI_LABEL_PROPERTY_TEXT, "2");
     }
 }
 void ui_event_Button3(lv_event_t * e)
@@ -152,7 +140,7 @@ void ui_event_Button3(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
     if(event_code == LV_EVENT_CLICKED) {
-        add_to_label(3);
+        _ui_label_set_property(ui_Text_input, _UI_LABEL_PROPERTY_TEXT, "3");
     }
 }
 void ui_event_Button4(lv_event_t * e)
@@ -160,7 +148,7 @@ void ui_event_Button4(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
     if(event_code == LV_EVENT_CLICKED) {
-        add_to_label(4);
+        _ui_label_set_property(ui_Text_input, _UI_LABEL_PROPERTY_TEXT, "4");
     }
 }
 void ui_event_Button5(lv_event_t * e)
@@ -168,7 +156,7 @@ void ui_event_Button5(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
     if(event_code == LV_EVENT_CLICKED) {
-        add_to_label(5);
+        _ui_label_set_property(ui_Text_input, _UI_LABEL_PROPERTY_TEXT, "5");
     }
 }
 void ui_event_Button6(lv_event_t * e)
@@ -176,7 +164,7 @@ void ui_event_Button6(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
     if(event_code == LV_EVENT_CLICKED) {
-        add_to_label(6);
+        _ui_label_set_property(ui_Text_input, _UI_LABEL_PROPERTY_TEXT, "6");
     }
 }
 void ui_event_Button7(lv_event_t * e)
@@ -184,7 +172,7 @@ void ui_event_Button7(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
     if(event_code == LV_EVENT_CLICKED) {
-        add_to_label(7);
+        _ui_label_set_property(ui_Text_input, _UI_LABEL_PROPERTY_TEXT, "7");
     }
 }
 void ui_event_Button8(lv_event_t * e)
@@ -192,7 +180,7 @@ void ui_event_Button8(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
     if(event_code == LV_EVENT_CLICKED) {
-       add_to_label(8);
+        _ui_label_set_property(ui_Text_input, _UI_LABEL_PROPERTY_TEXT, "8");
     }
 }
 void ui_event_Button9(lv_event_t * e)
@@ -200,7 +188,7 @@ void ui_event_Button9(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
     if(event_code == LV_EVENT_CLICKED) {
-        add_to_label(9);
+        _ui_label_set_property(ui_Text_input, _UI_LABEL_PROPERTY_TEXT, "9");
     }
 }
 void ui_event_Button0(lv_event_t * e)
@@ -208,15 +196,15 @@ void ui_event_Button0(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
     if(event_code == LV_EVENT_CLICKED) {
-        add_to_label(0);
+        _ui_label_set_property(ui_Text_input, _UI_LABEL_PROPERTY_TEXT, "0");
     }
 }
-void ui_event_Back_Button(lv_event_t * e)
+void ui_event_Enter_Button(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
     if(event_code == LV_EVENT_CLICKED) {
-        _ui_screen_change(&ui_Home_Screen, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_Home_Screen_screen_init);
+        _ui_label_set_property(ui_Text_input, _UI_LABEL_PROPERTY_TEXT, "0");
     }
 }
 void ui_event_Back_Button2(lv_event_t * e)
