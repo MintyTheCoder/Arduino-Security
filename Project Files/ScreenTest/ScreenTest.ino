@@ -5,6 +5,7 @@
 #include "ui.h"
 
 extern char input[6];
+extern bool passInput;
 
 /* Insert resolution WxH according to your SquareLine studio project settings */
 Arduino_H7_Video Display(800, 480, GigaDisplayShield);
@@ -22,4 +23,10 @@ void loop() {
 
   /* Feed LVGL engine */
   lv_timer_handler();
+  if (passInput) 
+  {
+    Serial.println(input);
+  }
+
+  passInput = false;
 }

@@ -27,7 +27,7 @@ void ui_Password_Screen_screen_init(void)
     lv_obj_set_width(ui_Back_Label, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_Back_Label, LV_SIZE_CONTENT);    /// 1
     lv_obj_set_align(ui_Back_Label, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_Back_Label, "←");
+    lv_label_set_text(ui_Back_Label, "<--");
 
     ui_Text_Input = lv_obj_create(ui_Password_Screen);
     lv_obj_set_width(ui_Text_Input, 175);
@@ -245,7 +245,7 @@ void ui_Password_Screen_screen_init(void)
     lv_obj_set_width(ui_Enter, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_Enter, LV_SIZE_CONTENT);    /// 1
     lv_obj_set_align(ui_Enter, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_Enter, "☑");
+    lv_label_set_text(ui_Enter, "Enter");
 
     lv_obj_add_event_cb(ui_Back_Button, ui_event_Back_Button, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Backspace_Button, ui_event_Backspace_Button, LV_EVENT_ALL, NULL);
