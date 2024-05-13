@@ -89,7 +89,7 @@ extern lv_obj_t * ui_Back_Label2;
 extern lv_obj_t * ui____initial_actions0;
 
 
-LV_IMG_DECLARE(ui_img_1525890679);    // assets/Designer-removebg-preview.png
+LV_IMG_DECLARE(ui_img_logo_transp_png);    // assets/Logo Transp.png
 
 
 

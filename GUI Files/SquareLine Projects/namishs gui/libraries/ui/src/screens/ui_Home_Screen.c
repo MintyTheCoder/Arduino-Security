@@ -49,7 +49,7 @@ void ui_Home_Screen_screen_init(void)
     lv_obj_set_style_text_font(ui_Go_To_RFID, &lv_font_montserrat_30, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_Image1 = lv_img_create(ui_Home_Screen);
-    lv_img_set_src(ui_Image1, &ui_img_1525890679);
+    lv_img_set_src(ui_Image1, &ui_img_logo_transp_png);
     lv_obj_set_width(ui_Image1, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_Image1, LV_SIZE_CONTENT);    /// 1
     lv_obj_set_x(ui_Image1, -165);

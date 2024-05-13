@@ -117,7 +117,7 @@ void loop()
   //inputRetrieval();
   //buttonCheck();
   //screenLoop();
-  Serial.print(Serial2.readString());
+  Serial.print(Serial.readString());
 }
 
 void screenLoop()

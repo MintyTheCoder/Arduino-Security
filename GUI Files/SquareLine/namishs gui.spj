@@ -1592,7 +1592,7 @@
               {
                 "nid": 860771333,
                 "strtype": "IMAGE/Asset",
-                "strval": "assets/Designer-removebg-preview.png",
+                "strval": "assets/Logo Transp.png",
                 "InheritedType": 5
               },
               {
@@ -12257,7 +12257,7 @@
     "theme_color2": 0,
     "uiExportFolderPath": "C:/Users/1124045/Documents/GitHub/Arduino-Security/GUI Files/SquareLine Projects/namishs gui/./libraries/ui/src",
     "projectExportFolderPath": "C:/Users/1124045/Documents/GitHub/Arduino-Security/GUI Files/SquareLine Projects/namishs gui",
-    "backup_cnt": 62,
+    "backup_cnt": 63,
     "autosave_cnt": 0,
     "lvgl_version": "8.3.11",
     "callfuncsexport": "C_FILE",
