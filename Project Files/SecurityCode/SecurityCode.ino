@@ -1,6 +1,11 @@
 #include <Keypad.h>
 #include <pitches.h>
 #include <LiquidCrystal.h>
+#include "Arduino_H7_Video.h"
+#include "Arduino_GigaDisplayTouch.h"
+
+#include "lvgl.h"
+#include "ui.h"
 //#include <EEPROM.h>
 
 /* Pin layout used:
@@ -33,11 +38,16 @@
 
 String content = "";
 
+extern char input[6];
+extern bool passInput;
+
 char userInput[Password_Length];
 int screenPosition = 0;
 
 
 LiquidCrystal lcd(7, 8, 9, 10, 11, 12);
+Arduino_H7_Video Display(800, 480, GigaDisplayShield);
+Arduino_GigaDisplayTouch Touch;
 
 
 const byte ROWS = 4;
@@ -62,7 +72,7 @@ void setup()
   while (!Serial1);
   Serial.println("System starting... \n");
   setupPins();
-  setupLCD();
+  setupScreen();
   Serial.println("System setup completed. \n");
 }
 
@@ -71,22 +81,19 @@ void setupSerial()
   Serial.begin(9600);  // Initiate a serial communication via USB
   Serial1.begin(9600); // Initiate a serial communication between boards
   Serial1.setTimeout(10);
+  Serial2.begin(9600);
   if(!Serial)
   {
     delay(1500);
   }
 }
 
-void setupLCD() 
+void setupScreen()
 {
-  Serial.println("Initializing LCD...");
-  // set brightness of LCD
-  analogWrite(2, 60);
+  Display.begin();
+  Touch.begin();
 
-  lcd.begin(16, 2);
-  lcd.setCursor(0, 0);
-  lcd.print("Enter Password:");
-  Serial.println("LCD Initialized \n");
+  ui_init();
 }
 
 void setupPins() 
@@ -107,15 +114,21 @@ void setupPins()
 
 void loop() 
 {
-  inputRetrieval();
-  buttonCheck();
+  //inputRetrieval();
+  //buttonCheck();
+  //screenLoop();
+  Serial.print(Serial2.readString());
 }
 
-void resetLCD() 
+void screenLoop()
 {
-  lcd.setCursor(0, 0);
-  lcd.print("Enter Password:");
-  Serial.println("LCD Reset");
+  lv_timer_handler();
+  if (passInput) 
+  {
+    Serial.println(input);
+  }
+
+  passInput = false;
 }
 
 void rfidInput() 
@@ -168,7 +181,7 @@ void correctInput()
   delay(5000);
   digitalWrite(greenPin, LOW);
   digitalWrite(lockPin, HIGH);
-  resetLCD();
+  //resetLCD();
 }
 
 void incorrectInput() 
@@ -178,7 +191,7 @@ void incorrectInput()
   Serial.println("Access Denied - Incorrect Input");
   delay(5000);
   digitalWrite(redPin, LOW);
-  resetLCD();
+  //resetLCD();
 }
 
 void playBuzzer(byte pin, byte element) 

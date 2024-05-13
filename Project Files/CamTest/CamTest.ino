@@ -22,7 +22,7 @@
 // ===========================
 const char* ssid = "CPS-TEACH";
 const char* password = "!Il0v3+oteach!";
-
+extern bool faceIsDetected;
 void startCameraServer();
 void setupLedFlash(int pin);
 
@@ -136,5 +136,10 @@ void setup() {
 
 void loop() {
   // Do nothing. Everything is done in another task by the web server
-  delay(10000);
+  //delay(10000);
+  if (faceIsDetected)
+  {
+    Serial.println("Face Was Detected!!");
+    faceIsDetected = false;
+  }
 }
