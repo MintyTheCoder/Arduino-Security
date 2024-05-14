@@ -114,9 +114,9 @@ void setupPins()
 
 void loop() 
 {
-  //inputRetrieval();
-  //buttonCheck();
-  //screenLoop();
+  screenLoop();
+  inputRetrieval();
+  buttonCheck();
   Serial.print(Serial.readString());
 }
 
@@ -203,9 +203,9 @@ void playBuzzer(byte pin, byte element)
 void inputRetrieval() 
 {
   rfidInput();
-  char customKey = customKeypad.getKey();
+  //char customKey = customKeypad.getKey();
 
-  if (customKey) 
+  /*if (customKey) 
   {
     userInput[screenPosition] = customKey;
     lcd.setCursor(screenPosition, 1);
@@ -214,14 +214,14 @@ void inputRetrieval()
     Serial.print("Keypad Input: ");
     Serial.println(customKey);
   }
-
+  
   while (screenPosition == Password_Length - 1) 
   {
     lcd.clear();
     checkKeypadInput();
     rfidInput();
     clearData();
-  }
+  }*/
 }
 
 void checkKeypadInput() 
