@@ -35,7 +35,7 @@
 #define CONFIG_ESP_FACE_RECOGNITION_ENABLED 1
 #endif
 #else
-#define CONFIG_ESP_FACE_DETECT_ENABLED 0
+#define CONFIG_ESP_FACE_DETECT_ENABLED 1
 #define CONFIG_ESP_FACE_RECOGNITION_ENABLED 0
 #endif
 
@@ -78,7 +78,7 @@
 #define CONFIG_LED_MAX_INTENSITY 255
 
 int led_duty = 0;
-bool isStreaming = false;
+bool isStreaming = true;
 bool faceIsDetected;
 
 #endif
@@ -99,7 +99,7 @@ httpd_handle_t camera_httpd = NULL;
 
 #if CONFIG_ESP_FACE_DETECT_ENABLED
 
-static int8_t detection_enabled = 0;
+static int8_t detection_enabled = 1;
 
 // #if TWO_STAGE
 // static HumanFaceDetectMSR01 s1(0.1F, 0.5F, 10, 0.2F);
