@@ -17,30 +17,19 @@
 //#define CAMERA_MODEL_XIAO_ESP32S3  // Has PSRAM
 #include "camera_pins.h"
 
-
-#include <WiFi.h>
-
-const char *ssid_AP = "GrizzlyGuardianWiFi"; //Enter the router name
-const char *password_AP = "Secur1ty4L!f3"; //Enter the router password
-
-IPAddress local_IP(192,168,1,100);//Set the IP address of ESP32 itself
-IPAddress gateway(192,168,1,10);   //Set the gateway of ESP32 itself
-IPAddress subnet(255,255,255,0);  //Set the subnet mask for ESP32 itself
 // ===========================
 // Enter your WiFi credentials
 // ===========================
-const char* ssid = "GrizzlyGuardianWiFi";
-const char* password = "Secur1ty4L!f3";
+const char* ssid = "CPS-TEACH";
+const char* password = "!Il0v3+oteach!";
 extern bool faceIsDetected;
-void wifiSetup();
 void startCameraServer();
 void setupLedFlash(int pin);
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
   Serial.setDebugOutput(true);
   Serial.println();
-  
 
   camera_config_t config;
   config.ledc_channel = LEDC_CHANNEL_0;
@@ -143,26 +132,6 @@ void setup() {
   Serial.print("Camera Ready! Use 'http://");
   Serial.print(WiFi.localIP());
   Serial.println("' to connect");
-}
-
-void wifiSetup()
-{
-  Serial.begin(115200);
-  delay(2000);
-  Serial.println("Setting soft-AP configuration ... ");
-  WiFi.disconnect();
-  WiFi.mode(WIFI_AP);
-  Serial.println(WiFi.softAPConfig(local_IP, gateway, subnet) ? "Ready" : "Failed!");
-  Serial.println("Setting soft-AP ... ");
-  boolean result = WiFi.softAP(ssid_AP, password_AP);
-  if(result){
-    Serial.println("Ready");
-    Serial.println(String("Soft-AP IP address = ") + WiFi.softAPIP().toString());
-    Serial.println(String("MAC address = ") + WiFi.softAPmacAddress().c_str());
-  }else{
-    Serial.println("Failed!");
-  }
-  Serial.println("Setup End");
 }
 
 void loop() {
