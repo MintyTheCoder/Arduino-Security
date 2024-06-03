@@ -13,21 +13,30 @@
 // ===================
 // Select camera model
 // ===================
-#define CAMERA_MODEL_AI_THINKER  // Has PSRAM
+//#define CAMERA_MODEL_AI_THINKER  // Has PSRAM
+//#define CAMERA_MODEL_WROVER_KIT // Has PSRAM
+//#define CAMERA_MODEL_ESP_EYE // Has PSRAM
+//#define CAMERA_MODEL_ESP32S3_EYE // Has PSRAM
+//#define CAMERA_MODEL_M5STACK_PSRAM // Has PSRAM
+//#define CAMERA_MODEL_M5STACK_WIDE // Has PSRAM
+#define CAMERA_MODEL_AI_THINKER // Has PSRAM
+//#define CAMERA_MODEL_XIAO_ESP32S3 // Has PSRAM
 //#define CAMERA_MODEL_XIAO_ESP32S3  // Has PSRAM
 #include "camera_pins.h"
 
 // ===========================
 // Enter your WiFi credentials
 // ===========================
-const char* ssid = "CPS-TEACH";
-const char* password = "!Il0v3+oteach!";
+
+//Waiting for router and own network to fully install camera
+const char* ssid = "GuardianWifi";
+const char* password = "Haist205";
 extern bool faceIsDetected;
 void startCameraServer();
 void setupLedFlash(int pin);
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   Serial.setDebugOutput(true);
   Serial.println();
 
@@ -136,10 +145,15 @@ void setup() {
 
 void loop() {
   // Do nothing. Everything is done in another task by the web server
-  //delay(10000);
+  delay(3000);
   if (faceIsDetected)
   {
-    Serial.println("Face Was Detected!!");
+    Serial.print("Detected");
     faceIsDetected = false;
+  }
+
+  else
+  {
+    Serial.print("No Face");
   }
 }
