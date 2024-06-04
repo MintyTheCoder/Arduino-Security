@@ -5,4 +5,4 @@ ui.c
 components/ui_comp_hook.c
 ui_helpers.c
 ui_events.c
-images/ui_img_1525890679.c
+images/ui_img_logo_transp_png.c

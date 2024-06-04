@@ -5,11 +5,12 @@
 
 #include "ui.h"
 #include "ui_helpers.h"
-#include <string.h>
 
 ///////////////////// VARIABLES ////////////////////
 char input[6] = "";
 int currentPos = 0;
+bool canRFID =  false;
+bool passInput = false;
 
 // SCREEN: ui_Home_Screen
 void ui_Home_Screen_screen_init(void);
@@ -26,6 +27,9 @@ lv_obj_t * ui_Image1;
 // SCREEN: ui_Password_Screen
 void ui_Password_Screen_screen_init(void);
 lv_obj_t * ui_Password_Screen;
+void ui_event_Back_Button(lv_event_t * e);
+lv_obj_t * ui_Back_Button;
+lv_obj_t * ui_Back_Label;
 lv_obj_t * ui_Text_Input;
 lv_obj_t * ui_Text_input;
 void ui_event_Backspace_Button(lv_event_t * e);
@@ -61,9 +65,9 @@ lv_obj_t * ui_Label9;
 void ui_event_Button0(lv_event_t * e);
 lv_obj_t * ui_Button0;
 lv_obj_t * ui_Label0;
-void ui_event_Back_Button(lv_event_t * e);
-lv_obj_t * ui_Back_Button;
-lv_obj_t * ui_Back_Label;
+void ui_event_Enter_Button(lv_event_t * e);
+lv_obj_t * ui_Enter_Button;
+lv_obj_t * ui_Enter;
 
 
 // SCREEN: ui_RFID_Screen
@@ -100,6 +104,18 @@ void ui_event_Scan_RFID(lv_event_t * e)
     lv_obj_t * target = lv_event_get_target(e);
     if(event_code == LV_EVENT_CLICKED) {
         _ui_screen_change(&ui_RFID_Screen, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_RFID_Screen_screen_init);
+        canRFID = true;
+    }
+}
+void ui_event_Back_Button(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+    lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_CLICKED) {
+        strcpy(input, "");
+        currentPos = 0;
+        _ui_label_set_property(ui_Text_input, _UI_LABEL_PROPERTY_TEXT, "Password:");
+        _ui_screen_change(&ui_Home_Screen, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_Home_Screen_screen_init);
     }
 }
 void ui_event_Backspace_Button(lv_event_t * e)
@@ -260,15 +276,12 @@ void ui_event_Button0(lv_event_t *e)
         }
     }
 }
-void ui_event_Back_Button(lv_event_t * e)
+void ui_event_Enter_Button(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
     if(event_code == LV_EVENT_CLICKED) {
-        strcpy(input, "");
-        currentPos = 0;
-        _ui_label_set_property(ui_Text_input, _UI_LABEL_PROPERTY_TEXT, "Password:");
-        _ui_screen_change(&ui_Home_Screen, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_Home_Screen_screen_init);
+        passInput = true;
     }
 }
 void ui_event_Back_Button2(lv_event_t * e)
@@ -277,6 +290,7 @@ void ui_event_Back_Button2(lv_event_t * e)
     lv_obj_t * target = lv_event_get_target(e);
     if(event_code == LV_EVENT_CLICKED) {
         _ui_screen_change(&ui_Home_Screen, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_Home_Screen_screen_init);
+        canRFID = false;
     }
 }
 

@@ -7,39 +7,39 @@
 
 void ui_RFID_Screen_screen_init(void)
 {
-    ui_RFID_Screen = lv_obj_create(NULL);
-    lv_obj_clear_flag(ui_RFID_Screen, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_bg_color(ui_RFID_Screen, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_RFID_Screen, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+ui_RFID_Screen = lv_obj_create(NULL);
+lv_obj_clear_flag( ui_RFID_Screen, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
+lv_obj_set_style_bg_color(ui_RFID_Screen, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_bg_opa(ui_RFID_Screen, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 
-    ui_Label = lv_label_create(ui_RFID_Screen);
-    lv_obj_set_width(ui_Label, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_Label, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_Label, 0);
-    lv_obj_set_y(ui_Label, -100);
-    lv_obj_set_align(ui_Label, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_Label, "Scan your RFID tag below");
-    lv_obj_set_style_text_color(ui_Label, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_opa(ui_Label, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_Label, &lv_font_montserrat_48, LV_PART_MAIN | LV_STATE_DEFAULT);
+ui_Label = lv_label_create(ui_RFID_Screen);
+lv_obj_set_width( ui_Label, LV_SIZE_CONTENT);  /// 1
+lv_obj_set_height( ui_Label, LV_SIZE_CONTENT);   /// 1
+lv_obj_set_x( ui_Label, 0 );
+lv_obj_set_y( ui_Label, -100 );
+lv_obj_set_align( ui_Label, LV_ALIGN_CENTER );
+lv_label_set_text(ui_Label,"Scan your RFID tag");
+lv_obj_set_style_text_color(ui_Label, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_text_opa(ui_Label, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_text_font(ui_Label, &lv_font_montserrat_48, LV_PART_MAIN| LV_STATE_DEFAULT);
 
-    ui_Back_Button2 = lv_btn_create(ui_RFID_Screen);
-    lv_obj_set_width(ui_Back_Button2, 75);
-    lv_obj_set_height(ui_Back_Button2, 50);
-    lv_obj_set_x(ui_Back_Button2, -349);
-    lv_obj_set_y(ui_Back_Button2, -204);
-    lv_obj_set_align(ui_Back_Button2, LV_ALIGN_CENTER);
-    lv_obj_add_flag(ui_Back_Button2, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
-    lv_obj_clear_flag(ui_Back_Button2, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_bg_color(ui_Back_Button2, lv_color_hex(0x942420), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_Back_Button2, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+ui_Back_Button2 = lv_btn_create(ui_RFID_Screen);
+lv_obj_set_width( ui_Back_Button2, 75);
+lv_obj_set_height( ui_Back_Button2, 50);
+lv_obj_set_x( ui_Back_Button2, -349 );
+lv_obj_set_y( ui_Back_Button2, -204 );
+lv_obj_set_align( ui_Back_Button2, LV_ALIGN_CENTER );
+lv_obj_add_flag( ui_Back_Button2, LV_OBJ_FLAG_SCROLL_ON_FOCUS );   /// Flags
+lv_obj_clear_flag( ui_Back_Button2, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
+lv_obj_set_style_bg_color(ui_Back_Button2, lv_color_hex(0x942420), LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_bg_opa(ui_Back_Button2, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 
-    ui_Back_Label2 = lv_label_create(ui_Back_Button2);
-    lv_obj_set_width(ui_Back_Label2, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_Back_Label2, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_align(ui_Back_Label2, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_Back_Label2, "<--");
+ui_Back_Label2 = lv_label_create(ui_Back_Button2);
+lv_obj_set_width( ui_Back_Label2, LV_SIZE_CONTENT);  /// 1
+lv_obj_set_height( ui_Back_Label2, LV_SIZE_CONTENT);   /// 1
+lv_obj_set_align( ui_Back_Label2, LV_ALIGN_CENTER );
+lv_label_set_text(ui_Back_Label2,"<--");
 
-    lv_obj_add_event_cb(ui_Back_Button2, ui_event_Back_Button2, LV_EVENT_ALL, NULL);
+lv_obj_add_event_cb(ui_Back_Button2, ui_event_Back_Button2, LV_EVENT_ALL, NULL);
 
 }

@@ -14,70 +14,70 @@ bool passInput = false;
 
 // SCREEN: ui_Home_Screen
 void ui_Home_Screen_screen_init(void);
-lv_obj_t * ui_Home_Screen;
-void ui_event_Password_Button(lv_event_t * e);
-lv_obj_t * ui_Password_Button;
-lv_obj_t * ui_Go_To_Password;
-void ui_event_Scan_RFID(lv_event_t * e);
-lv_obj_t * ui_Scan_RFID;
-lv_obj_t * ui_Go_To_RFID;
-lv_obj_t * ui_Image1;
+lv_obj_t *ui_Home_Screen;
+void ui_event_Password_Button( lv_event_t * e);
+lv_obj_t *ui_Password_Button;
+lv_obj_t *ui_Go_To_Password;
+void ui_event_Scan_RFID( lv_event_t * e);
+lv_obj_t *ui_Scan_RFID;
+lv_obj_t *ui_Go_To_RFID;
+lv_obj_t *ui_Logo;
 
 
 // SCREEN: ui_Password_Screen
 void ui_Password_Screen_screen_init(void);
-lv_obj_t * ui_Password_Screen;
-void ui_event_Back_Button(lv_event_t * e);
-lv_obj_t * ui_Back_Button;
-lv_obj_t * ui_Back_Label;
-lv_obj_t * ui_Text_Input;
-lv_obj_t * ui_Text_input;
-void ui_event_Backspace_Button(lv_event_t * e);
-lv_obj_t * ui_Backspace_Button;
-lv_obj_t * ui_Backspace_Label;
-void ui_event_Button1(lv_event_t * e);
-lv_obj_t * ui_Button1;
-lv_obj_t * ui_Label1;
-void ui_event_Button2(lv_event_t * e);
-lv_obj_t * ui_Button2;
-lv_obj_t * ui_Label2;
-void ui_event_Button3(lv_event_t * e);
-lv_obj_t * ui_Button3;
-lv_obj_t * ui_Label3;
-void ui_event_Button4(lv_event_t * e);
-lv_obj_t * ui_Button4;
-lv_obj_t * ui_Label4;
-void ui_event_Button5(lv_event_t * e);
-lv_obj_t * ui_Button5;
-lv_obj_t * ui_Label5;
-void ui_event_Button6(lv_event_t * e);
-lv_obj_t * ui_Button6;
-lv_obj_t * ui_Label6;
-void ui_event_Button7(lv_event_t * e);
-lv_obj_t * ui_Button7;
-lv_obj_t * ui_Label7;
-void ui_event_Button8(lv_event_t * e);
-lv_obj_t * ui_Button8;
-lv_obj_t * ui_Label8;
-void ui_event_Button9(lv_event_t * e);
-lv_obj_t * ui_Button9;
-lv_obj_t * ui_Label9;
-void ui_event_Button0(lv_event_t * e);
-lv_obj_t * ui_Button0;
-lv_obj_t * ui_Label0;
-void ui_event_Enter_Button(lv_event_t * e);
-lv_obj_t * ui_Enter_Button;
-lv_obj_t * ui_Enter;
+lv_obj_t *ui_Password_Screen;
+void ui_event_Back_Button( lv_event_t * e);
+lv_obj_t *ui_Back_Button;
+lv_obj_t *ui_Back_Label;
+lv_obj_t *ui_Text_Input;
+lv_obj_t *ui_Text_input;
+void ui_event_Backspace_Button( lv_event_t * e);
+lv_obj_t *ui_Backspace_Button;
+lv_obj_t *ui_Backspace_Label;
+void ui_event_Button1( lv_event_t * e);
+lv_obj_t *ui_Button1;
+lv_obj_t *ui_Label1;
+void ui_event_Button2( lv_event_t * e);
+lv_obj_t *ui_Button2;
+lv_obj_t *ui_Label2;
+void ui_event_Button3( lv_event_t * e);
+lv_obj_t *ui_Button3;
+lv_obj_t *ui_Label3;
+void ui_event_Button4( lv_event_t * e);
+lv_obj_t *ui_Button4;
+lv_obj_t *ui_Label4;
+void ui_event_Button5( lv_event_t * e);
+lv_obj_t *ui_Button5;
+lv_obj_t *ui_Label5;
+void ui_event_Button6( lv_event_t * e);
+lv_obj_t *ui_Button6;
+lv_obj_t *ui_Label6;
+void ui_event_Button7( lv_event_t * e);
+lv_obj_t *ui_Button7;
+lv_obj_t *ui_Label7;
+void ui_event_Button8( lv_event_t * e);
+lv_obj_t *ui_Button8;
+lv_obj_t *ui_Label8;
+void ui_event_Button9( lv_event_t * e);
+lv_obj_t *ui_Button9;
+lv_obj_t *ui_Label9;
+void ui_event_Button0( lv_event_t * e);
+lv_obj_t *ui_Button0;
+lv_obj_t *ui_Label0;
+void ui_event_Enter_Button( lv_event_t * e);
+lv_obj_t *ui_Enter_Button;
+lv_obj_t *ui_Enter;
 
 
 // SCREEN: ui_RFID_Screen
 void ui_RFID_Screen_screen_init(void);
-lv_obj_t * ui_RFID_Screen;
-lv_obj_t * ui_Label;
-void ui_event_Back_Button2(lv_event_t * e);
-lv_obj_t * ui_Back_Button2;
-lv_obj_t * ui_Back_Label2;
-lv_obj_t * ui____initial_actions0;
+lv_obj_t *ui_RFID_Screen;
+lv_obj_t *ui_Label;
+void ui_event_Back_Button2( lv_event_t * e);
+lv_obj_t *ui_Back_Button2;
+lv_obj_t *ui_Back_Label2;
+lv_obj_t *ui____initial_actions0;
 
 ///////////////////// TEST LVGL SETTINGS ////////////////////
 #if LV_COLOR_DEPTH != 16
@@ -90,13 +90,35 @@ lv_obj_t * ui____initial_actions0;
 ///////////////////// ANIMATIONS ////////////////////
 
 ///////////////////// FUNCTIONS ////////////////////
-void ui_event_Password_Button(lv_event_t * e)
+void ui_update_InputField()
 {
-    lv_event_code_t event_code = lv_event_get_code(e);
-    lv_obj_t * target = lv_event_get_target(e);
-    if(event_code == LV_EVENT_CLICKED) {
-        _ui_screen_change(&ui_Password_Screen, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_Password_Screen_screen_init);
+    lv_obj_set_style_text_color(ui_Text_input, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT );
+    _ui_label_set_property(ui_Text_input, _UI_LABEL_PROPERTY_TEXT, input);
+    if (currentPos == 0)
+    {
+        _ui_label_set_property(ui_Text_input, _UI_LABEL_PROPERTY_TEXT, "Password:");
     }
+}
+void ui_edit_label(char* text)
+{
+    _ui_label_set_property(ui_Text_input, _UI_LABEL_PROPERTY_TEXT, text);
+}
+
+void ui_edit_color(lv_color_t color)
+{
+    lv_obj_set_style_text_color(ui_Text_input, color, LV_PART_MAIN | LV_STATE_DEFAULT );
+}
+void resetScreen()
+{
+    _ui_screen_change( &ui_Home_Screen, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_Home_Screen_screen_init);
+    canRFID = false;
+    passInput = false;
+} 
+void ui_event_Password_Button( lv_event_t * e) {
+    lv_event_code_t event_code = lv_event_get_code(e);lv_obj_t * target = lv_event_get_target(e);
+if ( event_code == LV_EVENT_CLICKED) {
+      _ui_screen_change( &ui_Password_Screen, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_Password_Screen_screen_init);
+}
 }
 void ui_event_Scan_RFID(lv_event_t * e)
 {

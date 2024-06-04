@@ -1,197 +1,164 @@
-#include <Keypad.h>
 #include <pitches.h>
 #include <LiquidCrystal.h>
 #include "Arduino_H7_Video.h"
 #include "Arduino_GigaDisplayTouch.h"
+#include <Arduino_GigaDisplay.h>
 
 #include "lvgl.h"
 #include "ui.h"
-//#include <EEPROM.h>
 
-/* Pin layout used:
- * ---------------------------------
- *             MFRC522      Arduino
- *             Reader/PCD   Mega
- * Signal      Pin          Pin
- * ---------------------------------
- * RST/Reset   RST          49
- * SPI SS      SDA(SS)      47
- * SPI MOSI    MOSI         51
- * SPI MISO    MISO         50
- * SPI SCK     SCK          52
- */
+#define USBSerial Serial
+#define RFIDSerial Serial1
+#define CameraSerial Serial2
 
 #define Password_Length 7
 
 //Pin declaration and intialization
-#define redPin 23
-#define greenPin 48
 #define lockPin 42
 #define buzzerPin 44
 #define buttonPin 39
-
-
-//for fun
-#define BI_LED_RED 86
-#define BI_LED_GREEN 87
-#define BI_LED_BLUE 88
 
 String content = "";
 
 extern char input[6];
 extern bool passInput;
+extern bool canRFID;
+extern int currentPos;
 
-char userInput[Password_Length];
-int screenPosition = 0;
+bool screenOn = true;
 
-
-LiquidCrystal lcd(7, 8, 9, 10, 11, 12);
 Arduino_H7_Video Display(800, 480, GigaDisplayShield);
 Arduino_GigaDisplayTouch Touch;
-
-
-const byte ROWS = 4;
-const byte COLS = 4;
-
-char hexaKeys[ROWS][COLS] = {
-  { '1', '2', '3', 'A' },
-  { '4', '5', '6', 'B' },
-  { '7', '8', '9', 'C' },
-  { '*', '0', '#', 'D' }
-};
-
-byte rowPins[ROWS] = { 22, 25, 26, 29 };
-byte colPins[COLS] = { 30, 33, 34, 37 };
-
-// creates keypad object
-Keypad customKeypad = Keypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS);
+GigaDisplayBacklight backlight;
+GigaDisplayRGB rgb;  //create rgb object
 
 void setup() 
 {
   setupSerial();
-  while (!Serial1);
-  Serial.println("System starting... \n");
+  while (!Serial1)
+    ;
+  USBSerial.println("System starting... \n");
   setupPins();
   setupScreen();
-  Serial.println("System setup completed. \n");
+  USBSerial.println("System setup completed. \n");
 }
 
-void setupSerial()
+void setupSerial() 
 {
-  Serial.begin(9600);  // Initiate a serial communication via USB
-  Serial1.begin(9600); // Initiate a serial communication between boards
-  Serial1.setTimeout(10);
-  Serial2.begin(9600);
-  if(!Serial)
+  USBSerial.begin(115200);   // Initiate a serial communication via USB
+  RFIDSerial.begin(9600);  // Initiate a serial communication between RFID and GIGA (RX0/TX0)
+  RFIDSerial.setTimeout(10);
+  CameraSerial.begin(115200);  // Initiate a serial communication between camera and GIGA (RX1/TX1)
+  if (!Serial) 
   {
     delay(1500);
   }
 }
 
-void setupScreen()
+void setupScreen() 
 {
   Display.begin();
   Touch.begin();
-
+  backlight.begin();
   ui_init();
+  resetScreen();
+  lv_timer_handler();
+  backlight.off();
+  screenOn = false;
 }
-
 void setupPins() 
 {
-  Serial.println("Initializing Pins...");
-  pinMode(greenPin, OUTPUT);
-  digitalWrite(greenPin, LOW);
-  pinMode(redPin, OUTPUT);
-  digitalWrite(redPin, LOW);
+  USBSerial.println("Initializing Pins...");
   pinMode(lockPin, OUTPUT);
   pinMode(buttonPin, INPUT_PULLUP);
   digitalWrite(lockPin, HIGH);
-  //digitalWrite(BI_LED_GREEN, LOW);
-  //digitalWrite(BI_LED_BLUE, LOW);
-
-  Serial.println("Pins Initialized \n");
+  rgb.begin();
+  rgb.off();
+  USBSerial.println("Pins Initialized \n");
 }
 
 void loop() 
 {
-  screenLoop();
+  loopScreen();
+  camCheck();
+  serialOverride();
   inputRetrieval();
   buttonCheck();
-  Serial.print(Serial.readString());
+  loopScreen();
 }
 
-void screenLoop()
+void loopScreen()
 {
-  lv_timer_handler();
-  if (passInput) 
+  if(screenOn)
   {
-    Serial.println(input);
+    lv_timer_handler();
   }
-
-  passInput = false;
+  return;
 }
 
 void rfidInput() 
 {
-  String rfidInput = Serial1.readString();
+    String rfidInput = RFIDSerial.readString();
+    if (canRFID)
+    {
+      if (rfidInput != "") 
+      {
+        if (rfidInput.substring(1) == "EA E3 78 82" || rfidInput.substring(1) == "1A 19 AB 81") 
+        {
+          USBSerial.println("RFID Access Approved");
+          correctInput();
+          USBSerial.println("RFID Cleared\n");
+          clearData();
+        }
 
-  if (rfidInput != "")
-  {
-    if (rfidInput.substring(1) == "EA E3 78 82" || rfidInput.substring(1) == "1A 19 AB 81") 
-    {
-      lcd.clear();
-      lcd.print("Access Approved");
-      Serial.println("RFID Access Approved");
-      correctInput();
-      Serial.println("RFID Cleared\n");
-      clearData();
-    } 
-    
-    else if(checkForRFIDRestart(rfidInput.substring(0)))
-    {
-      return;
+        else if (checkForRFIDRestart(rfidInput.substring(0))) 
+        {
+          return;
+        }
+
+        else 
+        {
+          incorrectInput();
+          clearData();
+        }
+      }
     }
-    
-    else 
-    {
-      lcd.clear();
-      lcd.print("Access Denied");
-      //Serial.println("RFID Access Denied: \n" + rfidInput.substring(1));
-      incorrectInput();
-      clearData();
-    }
-  }
+  
 }
 
 void clearData() 
 {
-  while (screenPosition != 0) 
-  {
-    userInput[screenPosition--] = NULL;
-  }
   content = "";
 }
 
 void correctInput() 
 {
+  ui_edit_color(lv_color_hex(0x0acc0a));
+  ui_edit_label("Correct");
+  delay(25);
+  loopScreen();
   playBuzzer(buzzerPin, 0);
   digitalWrite(lockPin, LOW);
-  digitalWrite(greenPin, HIGH);
-  Serial.println("Lock Unlocked - Correct Input");
+  rgb.on(0, 255, 0);
+  USBSerial.println("Lock Unlocked - Correct Input");
   delay(5000);
-  digitalWrite(greenPin, LOW);
+  rgb.off();
   digitalWrite(lockPin, HIGH);
-  //resetLCD();
+  ui_update_InputField();]
 }
 
 void incorrectInput() 
 {
+  ui_edit_color(lv_color_hex(0xFF0000));
+  ui_edit_label("Incorrect");
+  delay(25);
+  loopScreen();
   playBuzzer(buzzerPin, 1);
-  digitalWrite(redPin, HIGH);
-  Serial.println("Access Denied - Incorrect Input");
+  rgb.on(255, 0, 0);
+  USBSerial.println("Access Denied - Incorrect Input");
   delay(5000);
-  digitalWrite(redPin, LOW);
-  //resetLCD();
+  rgb.off();
+  ui_update_InputField();
 }
 
 void playBuzzer(byte pin, byte element) 
@@ -202,72 +169,108 @@ void playBuzzer(byte pin, byte element)
 
 void inputRetrieval() 
 {
+  loopScreen();
   rfidInput();
-  //char customKey = customKeypad.getKey();
+  char code[Password_Length] = "205614";
+  //char emergencyCode[Password_Length] = "0*0*0*";
+  if (passInput) 
+  {
+    if (strstr(input, code) != NULL) 
+    {
+      correctInput();
+    } 
 
-  /*if (customKey) 
-  {
-    userInput[screenPosition] = customKey;
-    lcd.setCursor(screenPosition, 1);
-    lcd.print(userInput[screenPosition]);
-    screenPosition++;
-    Serial.print("Keypad Input: ");
-    Serial.println(customKey);
-  }
-  
-  while (screenPosition == Password_Length - 1) 
-  {
-    lcd.clear();
-    checkKeypadInput();
-    rfidInput();
-    clearData();
-  }*/
-}
+    else
+    {
+      incorrectInput();
+    }
 
-void checkKeypadInput() 
-{
-  char codeBlock1[Password_Length] = "B1#205";
-  char emergencyCode[Password_Length] = "0*0*0*";
-  Serial.print("Password Inputted By User: ");
-  Serial.println(userInput);
-
-  if (!strcmp(userInput, emergencyCode) || !strcmp(userInput, codeBlock1)) 
-  {
-    lcd.print("Correct");
-    correctInput();
-  } 
-  else 
-  {
-    lcd.print("Incorrect");
-    incorrectInput();
+    memset(input, 0, sizeof(input));
+    currentPos = 0;
+    ui_update_InputField();
+    passInput = false;
   }
 }
 
-void buttonCheck() 
-{
+void buttonCheck() {
   // Check if the button is pressed (active LOW)
-  if (digitalRead(buttonPin) == LOW) 
-  {
+  if (digitalRead(buttonPin) == LOW) {
     // If button is pressed, unlock the lock
     digitalWrite(lockPin, LOW);
-    Serial.println("Button Pressed - Lock Unlocked");
-    delay(2500); // Delay to keep the lock unlocked for 2.5 seconds
+    USBSerial.println("Button Pressed - Lock Unlocked");
+    delay(2500);  // Delay to keep the lock unlocked for 2.5 seconds
   }
-  digitalWrite(lockPin, HIGH); // Lock the lock after delay
+  digitalWrite(lockPin, HIGH);  // Lock the lock after delay
 }
 
-bool checkForRFIDRestart(String varToCheck)
+void camCheck()
 {
-  if (varToCheck == "Initializing RFID...")
+  if(CameraSerial.available() > 0 )
   {
-    Serial.println(varToCheck);
+    String camInput = CameraSerial.readStringUntil('\n');
+    USBSerial.println(camInput);
+    if (camInput.indexOf("Detected") != -1) 
+    {
+      loopScreen();
+      backlight.set(100);
+      Touch.begin();
+      screenOn = true;
+      loopScreen();
+    }
+
+    else if (camInput.indexOf("cam_hal: EV-VSYNC-OVF") != -1)
+    {
+      camCheck();
+    }
+
+    else
+    {
+      resetScreen();
+      delay(1000);
+      loopScreen();
+      Touch.end();
+      backlight.off();
+      screenOn = false;
+    }
+  }   
+}
+
+
+void serialOverride()
+{
+  if (USBSerial.available() > 0)
+  {
+    String serialInput = USBSerial.readStringUntil('\n');
+    USBSerial.println(serialInput);
+    if (serialInput.indexOf("RFID") != -1)
+    {
+      canRFID = true;
+    }
+
+    if (serialInput.indexOf("Not RFID") != -1)
+    {
+      canRFID = false;
+    }
+
+    else if (serialInput.indexOf("Detected") != -1)
+    {
+      loopScreen();
+      backlight.set(100);
+      Touch.begin();
+      screenOn = true;
+      loopScreen();
+    }
+  }
+}
+bool checkForRFIDRestart(String varToCheck) {
+  if (varToCheck == "Initializing RFID...") {
+    USBSerial.println(varToCheck);
     return true;
   }
 
-  else if (varToCheck == "RFID Initialized")
-  {
-    Serial.println(varToCheck);
-    Serial.println("RFID Board or Microcontroller restarted \n");
+  else if (varToCheck == "RFID Initialized") {
+    USBSerial.println(varToCheck);
+    USBSerial.println("RFID Board or Microcontroller restarted \n");
     return true;
   }
 

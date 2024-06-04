@@ -41,6 +41,7 @@ void rfidInput() {
 
   // Show UID on serial monitor
   byte letter;
+  content = "";
   for (byte i = 0; i < mfrc522.uid.size; i++) 
   {
     content.concat(String(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " "));
@@ -54,7 +55,5 @@ void rfidInput() {
     Serial.print(content);
   }
 
-  
-  content = "";
-  delay(2500);
+  delay(1000);
 }
