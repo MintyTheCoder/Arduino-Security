@@ -64,7 +64,7 @@ void setupScreen()
   resetScreen();
   lv_timer_handler();
   backlight.off();
-  screenOn = false;
+  screenOn = true;
 }
 void setupPins() 
 {
@@ -80,11 +80,10 @@ void setupPins()
 void loop() 
 {
   loopScreen();
-  camCheck();
+  //camCheck();
   serialOverride();
   inputRetrieval();
   buttonCheck();
-  loopScreen();
 }
 
 void loopScreen()
@@ -144,7 +143,7 @@ void correctInput()
   delay(5000);
   rgb.off();
   digitalWrite(lockPin, HIGH);
-  ui_update_InputField();]
+  ui_update_InputField();
 }
 
 void incorrectInput() 
@@ -169,7 +168,6 @@ void playBuzzer(byte pin, byte element)
 
 void inputRetrieval() 
 {
-  loopScreen();
   rfidInput();
   char code[Password_Length] = "205614";
   //char emergencyCode[Password_Length] = "0*0*0*";
@@ -205,13 +203,12 @@ void buttonCheck() {
 
 void camCheck()
 {
-  if(CameraSerial.available() > 0 )
+  if(CameraSerial.available() > 0)
   {
     String camInput = CameraSerial.readStringUntil('\n');
     USBSerial.println(camInput);
     if (camInput.indexOf("Detected") != -1) 
     {
-      loopScreen();
       backlight.set(100);
       Touch.begin();
       screenOn = true;
@@ -220,12 +217,12 @@ void camCheck()
 
     else if (camInput.indexOf("cam_hal: EV-VSYNC-OVF") != -1)
     {
-      camCheck();
+      return;
     }
 
     else
     {
-      resetScreen();
+      //resetScreen();
       delay(1000);
       loopScreen();
       Touch.end();
@@ -238,27 +235,41 @@ void camCheck()
 
 void serialOverride()
 {
-  if (USBSerial.available() > 0)
+  if (USBSerial.available() > 0 )
   {
     String serialInput = USBSerial.readStringUntil('\n');
     USBSerial.println(serialInput);
-    if (serialInput.indexOf("RFID") != -1)
+    if (serialInput.indexOf("UNLOCK") != -1)
+    {
+      correctInput();
+    }
+    else if(serialInput.indexOf("CLOSE") != -1)
+    {
+      digitalWrite(lockPin, HIGH);
+      incorrectInput();
+    }
+    else if (serialInput.indexOf("RFID") != -1)
     {
       canRFID = true;
     }
 
-    if (serialInput.indexOf("Not RFID") != -1)
+    else if (serialInput.indexOf("NO RF") != -1)
     {
       canRFID = false;
     }
 
-    else if (serialInput.indexOf("Detected") != -1)
+    else if (serialInput.indexOf("CAM") != -1)
     {
-      loopScreen();
       backlight.set(100);
       Touch.begin();
       screenOn = true;
-      loopScreen();
+    }
+
+    else if (serialInput.indexOf("OFF") != -1)
+    {
+      Touch.end();
+      backlight.off();
+      screenOn = false;
     }
   }
 }
